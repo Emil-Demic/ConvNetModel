@@ -28,7 +28,7 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size, shuffle=False)
 
-model = TripletModel("resnext")
+model = TripletModel("convnext")
 if args.cuda:
     model.cuda()
 
