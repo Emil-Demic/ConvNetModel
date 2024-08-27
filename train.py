@@ -1,0 +1,89 @@
+import numpy as np
+import torch
+import tqdm
+from torch.nn import TripletMarginLoss
+from torch.optim import Adam
+from torch.utils.data import DataLoader
+from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB
+
+
+from config import args
+from data import DatasetTrain, DatasetTest
+from model import TripletModel
+from utils import calculate_accuracy_alt
+
+transforms = Compose([
+    RGB(),
+    Resize((224, 224)),
+    ToImage(),
+    ToDtype(torch.float32, scale=True),
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
+dataset_train = DatasetTrain("train", transforms, transforms)
+dataset_test_sketch = DatasetTest("test/sketch", transforms)
+dataset_test_image = DatasetTest("test/image", transforms)
+
+dataloader_train = DataLoader(dataset_train, batch_size=5, shuffle=True)
+dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=5, shuffle=False)
+dataloader_test_image = DataLoader(dataset_test_image, batch_size=5, shuffle=False)
+
+model = TripletModel("resnext")
+if args.cuda:
+    model.cuda()
+
+optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+# scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
+loss = TripletMarginLoss(margin=0.2)
+if args.cuda:
+    loss.cuda()
+
+
+for epoch in range(args.epochs):
+    model.train()
+    running_loss = 0.0
+    for i, data in enumerate(dataloader_train):
+        optimizer.zero_grad()
+        if args.cuda:
+            data = data.cuda()
+
+        output = model(data)
+
+        loss = loss(output[0], output[1], output[2])
+
+        running_loss += loss.item()
+        loss.backward()
+        optimizer.step()
+
+        if i % 5 == 4:
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.4f}')
+            running_loss = 0.0
+
+    with torch.no_grad():
+        model.eval()
+
+        sketch_output = []
+        for data in tqdm.tqdm(dataloader_test_sketch):
+            if args.cuda:
+                data = data.cuda()
+            out = model.get_embedding(data)
+            sketch_output.append(out.cpu().numpy())
+
+        image_output = []
+        for data in tqdm.tqdm(dataloader_test_image):
+            if args.cuda:
+                data = data.cuda()
+            out = model.get_embedding(data)
+            image_output.append(out.cpu().numpy())
+
+        sketch_output = np.concatenate(sketch_output)
+        image_output = np.concatenate(image_output)
+
+        top1, top5, top10, meanK = calculate_accuracy_alt(sketch_output, image_output)
+        num = sketch_output.shape[0]
+        print("top1, top5, top10, meanK:", top1, top5, top10, meanK)
+        print(str(epoch + 1) + ':  top1: ' + str(top1 / float(num)))
+        print(str(epoch + 1) + ':  top5: ' + str(top5 / float(num)))
+        print(str(epoch + 1) + ': top10: ' + str(top10 / float(num)))
+
+
