@@ -45,7 +45,8 @@ for epoch in range(args.epochs):
     for i, data in enumerate(dataloader_train):
         optimizer.zero_grad()
         if args.cuda:
-            data = data.cuda()
+            data = [d.cuda() for d in data]
+            # data = data.cuda()
 
         output = model(data)
 
@@ -65,14 +66,16 @@ for epoch in range(args.epochs):
         sketch_output = []
         for data in tqdm.tqdm(dataloader_test_sketch):
             if args.cuda:
-                data = data.cuda()
+                data = [d.cuda() for d in data]
+                # data = data.cuda()
             out = model.get_embedding(data)
             sketch_output.append(out.cpu().numpy())
 
         image_output = []
         for data in tqdm.tqdm(dataloader_test_image):
             if args.cuda:
-                data = data.cuda()
+                data = [d.cuda() for d in data]
+                # data = data.cuda()
             out = model.get_embedding(data)
             image_output.append(out.cpu().numpy())
 
