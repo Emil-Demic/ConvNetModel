@@ -21,8 +21,8 @@ transforms = Compose([
 ])
 
 dataset_train = DatasetTrain("train", transforms, transforms)
-dataset_test_sketch = DatasetTest("test/sketch", transforms)
-dataset_test_image = DatasetTest("test/image", transforms)
+dataset_test_sketch = DatasetTest("test/sketch/Image", transforms)
+dataset_test_image = DatasetTest("test/image/Image", transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=5, shuffle=True)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=5, shuffle=False)
@@ -34,9 +34,9 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 # scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
-loss = TripletMarginLoss(margin=0.2)
+loss_fn = TripletMarginLoss(margin=0.2)
 if args.cuda:
-    loss.cuda()
+    loss_fn.cuda()
 
 
 for epoch in range(args.epochs):
@@ -49,7 +49,7 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss(output[0], output[1], output[2])
+        loss = loss_fn(output[0], output[1], output[2])
 
         running_loss += loss.item()
         loss.backward()

@@ -8,8 +8,8 @@ from torch.utils.data import Dataset
 class DatasetTrain(Dataset):
     def __init__(self, root, transforms_sketch=None, transforms_image=None):
         self.root = root
-        self.sketches = os.listdir(os.path.join(self.root, "sketch"))
-        self.images = os.listdir(os.path.join(self.root, "image"))
+        self.sketches = os.listdir(os.path.join(self.root, "sketch", "Image"))
+        self.images = os.listdir(os.path.join(self.root, "image", "Image"))
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
@@ -17,14 +17,14 @@ class DatasetTrain(Dataset):
         return len(self.images)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "sketch", self.sketches[idx])
-        image_path = os.path.join(self.root, "image", self.images[idx])
+        sketch_path = os.path.join(self.root, "sketch", "Image", self.sketches[idx])
+        image_path = os.path.join(self.root, "image", "Image", self.images[idx])
 
         negative_idx = random.randint(0, len(self.sketches) - 1)
         while negative_idx == idx:
             negative_idx = random.randint(0, len(self.sketches) - 1)
 
-        negative_path = os.path.join(self.root, "image", self.images[negative_idx])
+        negative_path = os.path.join(self.root, "image", "Image", self.images[negative_idx])
 
         sketch = Image.open(sketch_path)
         image = Image.open(image_path)
