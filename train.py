@@ -24,9 +24,9 @@ dataset_train = DatasetTrain("train", transforms, transforms)
 dataset_test_sketch = DatasetTest("test/sketch/Image", transforms)
 dataset_test_image = DatasetTest("test/image/Image", transforms)
 
-dataloader_train = DataLoader(dataset_train, batch_size=5, shuffle=True)
-dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=5, shuffle=False)
-dataloader_test_image = DataLoader(dataset_test_image, batch_size=5, shuffle=False)
+dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
+dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size, shuffle=False)
+dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size, shuffle=False)
 
 model = TripletModel("resnext")
 if args.cuda:
