@@ -28,7 +28,7 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size, shuffle=False)
 
-model = TripletModel("convnext")
+model = TripletModel("resnext")
 if args.cuda:
     model.cuda()
 
@@ -57,7 +57,7 @@ for epoch in range(args.epochs):
         optimizer.step()
 
         if i % 5 == 4:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.4f}')
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
             running_loss = 0.0
 
     with torch.no_grad():
