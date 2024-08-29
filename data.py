@@ -12,6 +12,7 @@ class DatasetTrain(Dataset):
         self.images = os.listdir(os.path.join(self.root, "image", "Image"))
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
+        random.seed(42)
 
     def __len__(self):
         return len(self.images)
