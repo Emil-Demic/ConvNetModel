@@ -14,6 +14,8 @@ parser.add_argument('--batch_size', type=int, default=5,
                     help='Number of samples in each batch.')
 parser.add_argument('--lr_scheduler_step', type=int, default=5,
                     help='Number of steps for learning rate scheduler.')
+parser.add_argument("--model", type=str, default='convnext',
+                    help="Name of the model to use for feature extraction.")
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
