@@ -4,6 +4,7 @@ import tqdm
 from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
 from torch.utils.data import DataLoader
+from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB
 
 
@@ -14,7 +15,7 @@ from utils import calculate_accuracy_alt
 
 transforms = Compose([
     RGB(),
-    Resize((224, 224)),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -25,15 +26,15 @@ dataset_test_sketch = DatasetTest("test/sketch/Image", transforms)
 dataset_test_image = DatasetTest("test/image/Image", transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
-dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size, shuffle=False)
-dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size, shuffle=False)
+dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
+dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
 
 model = TripletModel(args.model)
 if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-# scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
+scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
 loss_fn = TripletMarginLoss(margin=0.2)
 if args.cuda:
     loss_fn.cuda()
@@ -59,6 +60,9 @@ for epoch in range(args.epochs):
         if i % 5 == 4:
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
             running_loss = 0.0
+
+    scheduler.step()
+    print("lr: " + optimizer.state_dict()['param_groups'][0]['lr'])
 
     with torch.no_grad():
         model.eval()
