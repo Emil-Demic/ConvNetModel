@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity, Linear
+from torch.nn import Identity
 import torch.nn.functional as F
 
 
@@ -14,18 +14,8 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
             else:
                 net = convnext_tiny()
-            net.classifier[-1] = Linear(in_features=768, out_features=512, bias=True)
+            net.classifier[-1] = Identity()
             num_features = 768
-
-        case 'resnet':
-            from torchvision.models import resnet50
-            if pretrained:
-                from torchvision.models import ResNet50_Weights
-                net = resnet50(weights=ResNet50_Weights.DEFAULT)
-            else:
-                net = resnet50()
-            net.fc = Linear(in_features=2048, out_features=512, bias=True)
-            num_features = 2048
 
         case 'swin':
             from torchvision.models import swin_v2_t
@@ -48,14 +38,14 @@ def get_network(model: str, pretrained: bool):
             num_features = 512
 
         case 'vit':
-            from torchvision.models import vit_b_32
+            from torchvision.models import vit_l_16
             if pretrained:
-                from torchvision.models import ViT_B_32_Weights
-                net = vit_b_32(weights=ViT_B_32_Weights.DEFAULT)
+                from torchvision.models import ViT_L_16_Weights
+                net = vit_l_16(weights=ViT_L_16_Weights.IMAGENET1K_SWAG_LINEAR_V1)
             else:
-                net = vit_b_32()
+                net = vit_l_16()
             net.heads = Identity()
-            num_features = 768
+            num_features = 1024
 
         case 'vgg16':
             from torchvision.models import vgg16
