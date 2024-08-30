@@ -28,12 +28,12 @@ def get_network(model: str, pretrained: bool):
             num_features = 2048
 
         case 'resnet':
-            from torchvision.models import wide_resnet50_2
+            from torchvision.models import resnet50
             if pretrained:
-                from torchvision.models import Wide_ResNet50_2_Weights
-                net = wide_resnet50_2(weights=Wide_ResNet50_2_Weights.DEFAULT)
+                from torchvision.models import ResNet50_Weights
+                net = resnet50(weights=ResNet50_Weights.DEFAULT)
             else:
-                net = wide_resnet50_2()
+                net = resnet50()
             net.fc = Identity()
             num_features = 2048
 
@@ -98,13 +98,13 @@ def get_network(model: str, pretrained: bool):
             num_features = 1792
 
         case 'vgg16':
-            from torchvision.models import vgg16_bn
+            from torchvision.models import vgg16
             if pretrained:
-                from torchvision.models import VGG16_BN_Weights
-                net = vgg16_bn(weights=VGG16_BN_Weights.DEFAULT)
+                from torchvision.models import VGG16_Weights
+                net = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
             else:
-                net = vgg16_bn()
-            net.classifier[-1] = Identity()
+                net = vgg16()
+            net.classifier = Identity()
             num_features = 4096
 
     return net, num_features
