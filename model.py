@@ -14,7 +14,7 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
             else:
                 net = convnext_tiny()
-            net.classifier = Identity()
+            net.classifier[-1] = Identity()
             num_features = 768
 
         case 'swin':
@@ -68,15 +68,15 @@ class TripletModel(nn.Module):
         self.num_features = net_info[1]
 
     def forward(self, data):
-        res1 = self.embedding_net(data[0]).view(-1, self.num_features)
-        res2 = self.embedding_net(data[1]).view(-1, self.num_features)
-        res3 = self.embedding_net(data[2]).view(-1, self.num_features)
-        res1 = F.normalize(res1)
-        res2 = F.normalize(res2)
-        res3 = F.normalize(res3)
+        res1 = self.embedding_net(data[0])
+        res2 = self.embedding_net(data[1])
+        res3 = self.embedding_net(data[2])
+        # res1 = F.normalize(res1)
+        # res2 = F.normalize(res2)
+        # res3 = F.normalize(res3)
         return res1, res2, res3
 
     def get_embedding(self, data):
-        res = self.embedding_net(data).view(-1, self.num_features)
-        res = F.normalize(res)
+        res = self.embedding_net(data)
+        # res = F.normalize(res)
         return res
