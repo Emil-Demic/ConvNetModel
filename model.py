@@ -28,12 +28,12 @@ def get_network(model: str, pretrained: bool):
             num_features = 2048
 
         case 'resnet':
-            from torchvision.models import resnet152
+            from torchvision.models import wide_resnet50_2
             if pretrained:
-                from torchvision.models import ResNet152_Weights
-                net = resnet152(weights=ResNet152_Weights.DEFAULT)
+                from torchvision.models import Wide_ResNet50_2_Weights
+                net = wide_resnet50_2(weights=Wide_ResNet50_2_Weights.DEFAULT)
             else:
-                net = resnet152()
+                net = wide_resnet50_2()
             net.fc = Identity()
             num_features = 2048
 
