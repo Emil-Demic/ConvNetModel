@@ -17,6 +17,16 @@ def get_network(model: str, pretrained: bool):
             net.classifier[-1] = Linear(in_features=768, out_features=512, bias=True)
             num_features = 768
 
+        case 'resnet':
+            from torchvision.models import resnet50
+            if pretrained:
+                from torchvision.models import ResNet50_Weights
+                net = resnet50(weights=ResNet50_Weights.DEFAULT)
+            else:
+                net = resnet50()
+            net.fc = Linear(in_features=2048, out_features=512, bias=True)
+            num_features = 2048
+
         case 'swin':
             from torchvision.models import swin_v2_t
             if pretrained:
