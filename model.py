@@ -28,14 +28,24 @@ def get_network(model: str, pretrained: bool):
             num_features = 2048
 
         case 'resnet':
-            from torchvision.models import resnet50
+            from torchvision.models import resnet152
             if pretrained:
-                from torchvision.models import ResNet50_Weights
-                net = resnet50(weights=ResNet50_Weights.DEFAULT)
+                from torchvision.models import ResNet152_Weights
+                net = resnet152(weights=ResNet152_Weights.DEFAULT)
             else:
-                net = resnet50()
+                net = resnet152()
             net.fc = Identity()
             num_features = 2048
+
+        case 'regnet_x':
+            from torchvision.models import regnet_x_3_2gf
+            if pretrained:
+                from torchvision.models import RegNet_X_3_2GF_Weights
+                net = regnet_x_3_2gf(weights=RegNet_X_3_2GF_Weights.DEFAULT)
+            else:
+                net = regnet_x_3_2gf()
+            net.fc = Identity()
+            num_features = 1008
 
         case 'swin':
             from torchvision.models import swin_v2_t
