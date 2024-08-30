@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity
+from torch.nn import Identity, Linear
 import torch.nn.functional as F
 
 
@@ -14,7 +14,7 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
             else:
                 net = convnext_tiny()
-            net.classifier[-1] = Identity()
+            net.classifier = Linear(in_features=768, out_features=512, bias=True)
             num_features = 768
 
         case 'swin':
@@ -71,12 +71,12 @@ class TripletModel(nn.Module):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
         res3 = self.embedding_net(data[2])
-        # res1 = F.normalize(res1)
-        # res2 = F.normalize(res2)
-        # res3 = F.normalize(res3)
+        res1 = F.normalize(res1)
+        res2 = F.normalize(res2)
+        res3 = F.normalize(res3)
         return res1, res2, res3
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
-        # res = F.normalize(res)
+        res = F.normalize(res)
         return res
