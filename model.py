@@ -14,48 +14,8 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
             else:
                 net = convnext_tiny()
-            net.classifier[-1] = Identity()
+            net.classifier = Identity()
             num_features = 768
-
-        case 'resnext':
-            from torchvision.models import resnext50_32x4d
-            if pretrained:
-                from torchvision.models import ResNeXt50_32X4D_Weights
-                net = resnext50_32x4d(weights=ResNeXt50_32X4D_Weights.DEFAULT)
-            else:
-                net = resnext50_32x4d()
-            net.fc = Identity()
-            num_features = 2048
-
-        case 'resnet':
-            from torchvision.models import resnet50
-            if pretrained:
-                from torchvision.models import ResNet50_Weights
-                net = resnet50(weights=ResNet50_Weights.DEFAULT)
-            else:
-                net = resnet50()
-            net.fc = Identity()
-            num_features = 2048
-
-        case 'regnet_x':
-            from torchvision.models import regnet_x_3_2gf
-            if pretrained:
-                from torchvision.models import RegNet_X_3_2GF_Weights
-                net = regnet_x_3_2gf(weights=RegNet_X_3_2GF_Weights.DEFAULT)
-            else:
-                net = regnet_x_3_2gf()
-            net.fc = Identity()
-            num_features = 1008
-
-        case 'regnet_y':
-            from torchvision.models import regnet_y_3_2gf
-            if pretrained:
-                from torchvision.models import RegNet_Y_3_2GF_Weights
-                net = regnet_y_3_2gf(weights=RegNet_Y_3_2GF_Weights.DEFAULT)
-            else:
-                net = regnet_y_3_2gf()
-            net.fc = Identity()
-            num_features = 1512
 
         case 'swin':
             from torchvision.models import swin_v2_t
@@ -87,24 +47,14 @@ def get_network(model: str, pretrained: bool):
             net.heads = Identity()
             num_features = 768
 
-        case 'efficientnet':
-            from torchvision.models import efficientnet_b4
-            if pretrained:
-                from torchvision.models import EfficientNet_B4_Weights
-                net = efficientnet_b4(weights=EfficientNet_B4_Weights.DEFAULT)
-            else:
-                net = efficientnet_b4()
-            net.classifier = Identity()
-            num_features = 1792
-
         case 'vgg16':
             from torchvision.models import vgg16
             if pretrained:
                 from torchvision.models import VGG16_Weights
-                net = vgg16(weights=VGG16_Weights.DEFAULT)
+                net = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
             else:
                 net = vgg16()
-            net.classifier[-1] = Identity()
+            net.classifier = Identity()
             num_features = 4096
 
     return net, num_features
@@ -118,9 +68,9 @@ class TripletModel(nn.Module):
         self.num_features = net_info[1]
 
     def forward(self, data):
-        res1 = self.embedding_net(data[0])
-        res2 = self.embedding_net(data[1])
-        res3 = self.embedding_net(data[2])
+        res1 = self.embedding_net(data[0]).view(-1, self.num_features)
+        res2 = self.embedding_net(data[1]).view(-1, self.num_features)
+        res3 = self.embedding_net(data[2]).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
         res3 = F.normalize(res3)
