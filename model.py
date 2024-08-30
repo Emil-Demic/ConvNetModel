@@ -41,7 +41,7 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import vit_b_16
             if pretrained:
                 from torchvision.models import ViT_B_16_Weights
-                net = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
+                net = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_SWAG_LINEAR_V1)
             else:
                 net = vit_b_16()
             net.heads = Identity()
