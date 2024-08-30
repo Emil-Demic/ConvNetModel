@@ -61,8 +61,8 @@ for epoch in range(args.epochs):
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
             running_loss = 0.0
 
-    scheduler.step()
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
+    scheduler.step()
 
     with torch.no_grad():
         model.eval()
