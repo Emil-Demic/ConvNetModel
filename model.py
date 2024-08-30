@@ -38,12 +38,12 @@ def get_network(model: str, pretrained: bool):
             num_features = 512
 
         case 'vit':
-            from torchvision.models import vit_b_16
+            from torchvision.models import vit_b_32
             if pretrained:
-                from torchvision.models import ViT_B_16_Weights
-                net = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_SWAG_LINEAR_V1)
+                from torchvision.models import ViT_B_32_Weights
+                net = vit_b_32(weights=ViT_B_32_Weights.DEFAULT)
             else:
-                net = vit_b_16()
+                net = vit_b_32()
             net.heads = Identity()
             num_features = 768
 
