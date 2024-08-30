@@ -25,9 +25,6 @@ class DatasetTrain(Dataset):
         while negative_idx == idx:
             negative_idx = random.randint(0, len(self.sketches) - 1)
 
-        if idx == 0:
-            print("negative_idx: ", negative_idx)
-
         negative_path = os.path.join(self.root, "image", "Image", self.images[negative_idx])
 
         sketch = Image.open(sketch_path)
