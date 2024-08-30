@@ -47,6 +47,16 @@ def get_network(model: str, pretrained: bool):
             net.fc = Identity()
             num_features = 1008
 
+        case 'regnet_y':
+            from torchvision.models import regnet_y_3_2gf
+            if pretrained:
+                from torchvision.models import RegNet_Y_3_2GF_Weights
+                net = regnet_y_3_2gf(weights=RegNet_Y_3_2GF_Weights.DEFAULT)
+            else:
+                net = regnet_y_3_2gf()
+            net.fc = Identity()
+            num_features = 1512
+
         case 'swin':
             from torchvision.models import swin_v2_t
             if pretrained:
