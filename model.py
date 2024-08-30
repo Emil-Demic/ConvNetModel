@@ -101,10 +101,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import vgg16
             if pretrained:
                 from torchvision.models import VGG16_Weights
-                net = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
+                net = vgg16(weights=VGG16_Weights.DEFAULT)
             else:
                 net = vgg16()
-            net.classifier = Identity()
+            net.classifier[-1] = Identity()
             num_features = 4096
 
     return net, num_features
