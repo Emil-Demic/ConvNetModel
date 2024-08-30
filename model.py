@@ -97,6 +97,16 @@ def get_network(model: str, pretrained: bool):
             net.classifier = Identity()
             num_features = 1792
 
+        case 'shufflenet':
+            from torchvision.models import shufflenet_v2_x2_0
+            if pretrained:
+                from torchvision.models import ShuffleNet_V2_X2_0_Weights
+                net = shufflenet_v2_x2_0(weights=ShuffleNet_V2_X2_0_Weights.DEFAULT)
+            else:
+                net = shufflenet_v2_x2_0()
+            net.fc = Identity()
+            num_features = 2048
+
     return net, num_features
 
 
