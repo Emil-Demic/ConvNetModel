@@ -37,40 +37,25 @@ class DatasetTrain(Dataset):
             sketch = self.transforms_sketch(sketch)
 
         if self.transforms_image:
-            open_cv_image = numpy.array(image)
-            open_cv_image = open_cv_image[:, :, ::-1].copy()
-            edge_map = cv2.Canny(open_cv_image, 150, 300)
-            image = Image.fromarray(edge_map)
             image = self.transforms_image(image)
-
-            open_cv_image = numpy.array(negative)
-            open_cv_image = open_cv_image[:, :, ::-1].copy()
-            edge_map = cv2.Canny(open_cv_image, 150, 300)
-            negative = Image.fromarray(edge_map)
             negative = self.transforms_image(negative)
 
         return sketch, image, negative
 
 
 class DatasetTest(Dataset):
-    def __init__(self, img_dir, transforms=None, sketch=True):
+    def __init__(self, img_dir, transforms=None):
         self.img_dir = img_dir
         self.images = os.listdir(img_dir)
         self.transforms = transforms
-        self.sketch = sketch
 
     def __len__(self):
         return len(self.images)
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir, self.images[idx])
-        img = Image.open(img_path).convert('RGB')
+        img = Image.open(img_path)
         if self.transforms is not None:
-            if not self.sketch:
-                open_cv_image = numpy.array(img)
-                open_cv_image = open_cv_image[:, :, ::-1].copy()
-                edge_map = cv2.Canny(open_cv_image, 150, 300)
-                img = Image.fromarray(edge_map)
             img = self.transforms(img)
 
         return img

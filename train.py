@@ -13,7 +13,7 @@ from model import TripletModel
 from utils import calculate_accuracy_alt
 
 transforms = Compose([
-    # RGB(),
+    RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BICUBIC),
     ToImage(),
     ToDtype(torch.float32, scale=True),
@@ -22,7 +22,7 @@ transforms = Compose([
 
 dataset_train = DatasetTrain("train", transforms, transforms)
 dataset_test_sketch = DatasetTest("test/sketch/Image", transforms)
-dataset_test_image = DatasetTest("test/image/Image", transforms, sketch=False)
+dataset_test_image = DatasetTest("test/image/Image", transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
