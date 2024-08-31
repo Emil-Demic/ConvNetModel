@@ -14,7 +14,7 @@ from model import TripletModel
 from utils import calculate_accuracy_alt
 
 transforms = Compose([
-    # RGB(),
+    RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BICUBIC),
     ToImage(),
     ToDtype(torch.float32, scale=True),
