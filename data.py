@@ -30,8 +30,8 @@ class DatasetTrain(Dataset):
         negative_path = os.path.join(self.root, "image", "Image", self.images[negative_idx])
 
         sketch = Image.open(sketch_path)
-        image = Image.open(image_path)
-        negative = Image.open(negative_path)
+        image = Image.open(image_path).convert('RGB')
+        negative = Image.open(negative_path).convert('RGB')
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
