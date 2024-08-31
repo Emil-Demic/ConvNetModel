@@ -42,6 +42,11 @@ class DatasetTrain(Dataset):
             edge_map = cv2.Canny(open_cv_image, 150, 300)
             image = Image.fromarray(edge_map)
             image = self.transforms_image(image)
+
+            open_cv_image = numpy.array(negative)
+            open_cv_image = open_cv_image[:, :, ::-1].copy()
+            edge_map = cv2.Canny(open_cv_image, 150, 300)
+            negative = Image.fromarray(edge_map)
             negative = self.transforms_image(negative)
 
         return sketch, image, negative
