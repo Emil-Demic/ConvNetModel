@@ -1,6 +1,8 @@
 import os
 import random
 
+import cv2
+import numpy
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -35,6 +37,10 @@ class DatasetTrain(Dataset):
             sketch = self.transforms_sketch(sketch)
 
         if self.transforms_image:
+            open_cv_image = numpy.array(image)
+            open_cv_image = open_cv_image[:, :, ::-1].copy()
+            edge_map = cv2.Canny(open_cv_image, 150, 300)
+            image = Image.fromarray(edge_map)
             image = self.transforms_image(image)
             negative = self.transforms_image(negative)
 
@@ -42,10 +48,11 @@ class DatasetTrain(Dataset):
 
 
 class DatasetTest(Dataset):
-    def __init__(self, img_dir, transforms=None):
+    def __init__(self, img_dir, transforms=None, sketch=True):
         self.img_dir = img_dir
         self.images = os.listdir(img_dir)
         self.transforms = transforms
+        self.sketch = sketch
 
     def __len__(self):
         return len(self.images)
@@ -54,6 +61,11 @@ class DatasetTest(Dataset):
         img_path = os.path.join(self.img_dir, self.images[idx])
         img = Image.open(img_path)
         if self.transforms is not None:
+            if not self.sketch:
+                open_cv_image = numpy.array(img)
+                open_cv_image = open_cv_image[:, :, ::-1].copy()
+                edge_map = cv2.Canny(open_cv_image, 150, 300)
+                img = Image.fromarray(edge_map)
             img = self.transforms(img)
 
         return img
