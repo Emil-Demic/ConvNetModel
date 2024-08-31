@@ -64,7 +64,7 @@ class DatasetTest(Dataset):
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir, self.images[idx])
-        img = Image.open(img_path)
+        img = Image.open(img_path).convert('RGB')
         if self.transforms is not None:
             if not self.sketch:
                 open_cv_image = numpy.array(img)
