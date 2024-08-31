@@ -5,8 +5,7 @@ from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
-from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB
-
+from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
 
 from config import args
 from data import DatasetTrain, DatasetTest
@@ -14,7 +13,8 @@ from model import TripletModel
 from utils import calculate_accuracy_alt
 
 transforms1 = Compose([
-    RGB(),
+    # RGB(),
+    Grayscale(),
     Resize((224, 224), interpolation=InterpolationMode.BICUBIC),
     ToImage(),
     ToDtype(torch.float32, scale=True),
@@ -23,6 +23,7 @@ transforms1 = Compose([
 
 transforms2 = Compose([
     # RGB(),
+    Grayscale(),
     Resize((224, 224), interpolation=InterpolationMode.BICUBIC),
     ToImage(),
     ToDtype(torch.float32, scale=True),
