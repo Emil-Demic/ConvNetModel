@@ -21,8 +21,8 @@ transforms = Compose([
 ])
 
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/images", args.users, transforms)
-dataset_test_image = DatasetTest("fscoco/raster_sketches", args.users, transforms)
+dataset_test_sketch = DatasetTest("fscoco/images", False,args.users, transforms)
+dataset_test_image = DatasetTest("fscoco/raw_data", True, args.users, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
