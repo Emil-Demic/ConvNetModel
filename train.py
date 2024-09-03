@@ -14,17 +14,18 @@ from utils import calculate_accuracy_alt
 
 transforms = Compose([
     RGB(),
-    Resize((224, 224), interpolation=InterpolationMode.BICUBIC),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
+# dataset_train = DatasetTrain("train", transforms, transforms)
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
 dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
-dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=False)
+dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
 
