@@ -1,8 +1,13 @@
+import json
 import os
 import random
 
+import PIL
 from PIL import Image
 from torch.utils.data import Dataset
+
+from utils import drawPNG
+
 
 class DatasetTrain(Dataset):
     def __init__(self, root, num_of_users=100, transforms_sketch=None, transforms_image=None):
@@ -32,7 +37,7 @@ class DatasetTrain(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
+        sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
@@ -41,7 +46,9 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        sketch = Image.open(sketch_path)
+        # sketch = Image.open(sketch_path)
+        sketch = drawPNG(json.load(open(sketch_path)))
+        sketch = PIL.Image.fromarray(sketch)
         image = Image.open(image_path).convert('RGB')
         negative = Image.open(negative_path).convert('RGB')
 
@@ -55,7 +62,7 @@ class DatasetTrain(Dataset):
         return sketch, image, negative
 
 class DatasetTest(Dataset):
-    def __init__(self, root, num_of_users=100, transforms=None):
+    def __init__(self, root, sketch, num_of_users=100, transforms=None):
         if num_of_users > 100:
             raise ValueError('num_of_users > 100')
 
@@ -74,13 +81,20 @@ class DatasetTest(Dataset):
                     self.files.append(os.path.join(str(i), file_name))
 
         self.transforms = transforms
+        self.sketch = sketch
 
     def __len__(self):
         return len(self.files)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-        img = Image.open(img_path)
+        if self.sketch:
+            img_path = os.path.join(self.root, self.files[idx] + ".json")
+            img = drawPNG(json.load(open(img_path)))
+            img = PIL.Image.fromarray(img)
+        else:
+            img_path = os.path.join(self.root, self.files[idx] + ".jpg")
+            img = Image.open(img_path)
+
         if self.transforms is not None:
             img = self.transforms(img)
 
