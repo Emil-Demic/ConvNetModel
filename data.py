@@ -20,7 +20,7 @@ class DatasetTrain(Dataset):
             file_names = os.listdir(os.path.join(root, "images", str(i)))
             file_names = [file.split('.')[0] for file in file_names]
             for file_name in file_names:
-                if file_name not in val_ids:
+                if int(file_name) not in val_ids:
                     self.files.append(os.path.join(str(i), file_name))
 
         self.transforms_sketch = transforms_sketch
@@ -70,7 +70,7 @@ class DatasetTest(Dataset):
             file_names = os.listdir(os.path.join(root, str(i)))
             file_names = [file.split('.')[0] for file in file_names]
             for file_name in file_names:
-                if file_name in val_ids:
+                if int(file_name) in val_ids:
                     self.files.append(os.path.join(str(i), file_name))
 
         self.transforms = transforms
