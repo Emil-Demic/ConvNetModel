@@ -48,9 +48,9 @@ class DatasetTrain(Dataset):
 
         # sketch = Image.open(sketch_path)
         sketch = drawPNG(json.load(open(sketch_path)))
-        sketch = PIL.Image.fromarray(sketch).convert('RGB')
-        image = Image.open(image_path).convert('RGB')
-        negative = Image.open(negative_path).convert('RGB')
+        sketch = PIL.Image.fromarray(sketch)
+        image = Image.open(image_path)
+        negative = Image.open(negative_path)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -90,7 +90,7 @@ class DatasetTest(Dataset):
         if self.sketch:
             img_path = os.path.join(self.root, self.files[idx] + ".json")
             img = drawPNG(json.load(open(img_path)))
-            img = PIL.Image.fromarray(img).convert('RGB')
+            img = PIL.Image.fromarray(img)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
             img = Image.open(img_path)
