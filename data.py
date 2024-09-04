@@ -136,21 +136,21 @@ class DatasetTrain(Dataset):
         return sketch, image, negative
 
 
-# class DatasetTest(Dataset):
-#     def __init__(self, img_dir, transforms=None):
-#         self.img_dir = img_dir
-#         self.images = os.listdir(img_dir)
-#         self.transforms = transforms
-#
-#     def __len__(self):
-#         return len(self.images)
-#
-#     def __getitem__(self, idx):
-#         img_path = os.path.join(self.img_dir, self.images[idx])
-#         img = Image.open(img_path)
-#         if self.transforms is not None:
-#             img = self.transforms(img)
-#
-#         return img
+class DatasetTest2(Dataset):
+    def __init__(self, img_dir, transforms=None):
+        self.img_dir = img_dir
+        self.images = os.listdir(img_dir)
+        self.transforms = transforms
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.img_dir, self.images[idx])
+        img = Image.open(img_path)
+        if self.transforms is not None:
+            img = self.transforms(img)
+
+        return img
 
 

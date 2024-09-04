@@ -8,7 +8,7 @@ from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
 
 from config import args
-from data import DatasetTrain, DatasetTest
+from data import DatasetTrain, DatasetTest, DatasetTest2
 from model import TripletModel
 from utils import calculate_accuracy_alt
 
@@ -22,7 +22,7 @@ transforms = Compose([
 
 dataset_train = DatasetTrain("train", transforms, transforms)
 # dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
+dataset_test_sketch = DatasetTest2("test/sketch", transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
