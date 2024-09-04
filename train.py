@@ -22,7 +22,7 @@ transforms = Compose([
 
 # dataset_train = DatasetTrain("train", transforms, transforms)
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False,args.users, transforms)
+dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
 # dataset_test_image = DatasetTest2("test/image/Image", transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
