@@ -1,5 +1,5 @@
 /.idea
 /test
 /train
-tmp.py
+../fscoco/tmp.py
 /__pycache__
