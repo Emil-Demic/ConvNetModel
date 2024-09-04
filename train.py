@@ -22,7 +22,7 @@ transforms = Compose([
 
 dataset_train = DatasetTrain("train", transforms, transforms)
 # dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest2("test/sketch", transforms)
+dataset_test_sketch = DatasetTest2("test/sketch/Image", transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
