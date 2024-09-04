@@ -2,7 +2,6 @@ import json
 import os
 import random
 
-import PIL
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -37,7 +36,7 @@ class DatasetTrain(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
+        sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
@@ -46,9 +45,9 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        sketch = Image.open(sketch_path)
-        # sketch = drawPNG(json.load(open(sketch_path)))
-        # sketch = PIL.Image.fromarray(sketch)
+        # sketch = Image.open(sketch_path)
+        sketch = drawPNG(json.load(open(sketch_path)))
+        sketch = Image.fromarray(sketch)
         image = Image.open(image_path)
         negative = Image.open(negative_path)
 
