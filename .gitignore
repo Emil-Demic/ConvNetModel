@@ -3,3 +3,4 @@
 /train
 ../fscoco/tmp.py
 /__pycache__
+/fscoco
