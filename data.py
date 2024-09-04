@@ -89,7 +89,7 @@ class DatasetTest(Dataset):
         if self.sketch:
             img_path = os.path.join(self.root, self.files[idx] + ".json")
             img = drawPNG(json.load(open(img_path)))
-            img = PIL.Image.fromarray(img)
+            img = Image.fromarray(img)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
             img = Image.open(img_path)
