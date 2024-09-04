@@ -45,7 +45,6 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        # sketch = Image.open(sketch_path)
         sketch = drawPNG(json.load(open(sketch_path)))
         sketch = Image.fromarray(sketch)
         image = Image.open(image_path)
