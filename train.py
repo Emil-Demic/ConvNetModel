@@ -42,28 +42,28 @@ if args.cuda:
 
 
 for epoch in range(args.epochs):
-    model.train()
-    running_loss = 0.0
-    for i, data in enumerate(dataloader_train):
-        optimizer.zero_grad()
-        if args.cuda:
-            data = [d.cuda() for d in data]
-            # data = data.cuda()
-
-        output = model(data)
-
-        loss = loss_fn(output[0], output[1], output[2])
-
-        running_loss += loss.item()
-        loss.backward()
-        optimizer.step()
-
-        if i % 5 == 4:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
-            running_loss = 0.0
-
-    print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
-    scheduler.step()
+    # model.train()
+    # running_loss = 0.0
+    # for i, data in enumerate(dataloader_train):
+    #     optimizer.zero_grad()
+    #     if args.cuda:
+    #         data = [d.cuda() for d in data]
+    #         # data = data.cuda()
+    #
+    #     output = model(data)
+    #
+    #     loss = loss_fn(output[0], output[1], output[2])
+    #
+    #     running_loss += loss.item()
+    #     loss.backward()
+    #     optimizer.step()
+    #
+    #     if i % 5 == 4:
+    #         print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
+    #         running_loss = 0.0
+    #
+    # print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
+    # scheduler.step()
 
     with torch.no_grad():
         model.eval()
