@@ -20,8 +20,8 @@ transforms = Compose([
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-# dataset_train = DatasetTrain("train", transforms, transforms)
-dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
+dataset_train = DatasetTrain("train", transforms, transforms)
+# dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
 dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
