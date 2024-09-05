@@ -1,3 +1,5 @@
+import random
+
 import cv2
 import numpy as np
 import torch
@@ -24,7 +26,7 @@ def calculate_accuracy_alt(query_feature_all, image_feature_all):
     return rank1, rank5, rank10, rankM
 
 
-def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
+def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_stroke=False):
     raster_image = np.ones((side, side), dtype=np.uint8)
     prevX, prevY = None, None
     begin_time = vector_images[0]['timestamp']
@@ -37,6 +39,17 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
             start_time = (end_time - start_time) * time_frac
         else:
             end_time -= (end_time - start_time) * time_frac
+
+    if add_stroke:
+        noise_points = []
+        for _ in range(4):
+            idx = random.randint(0, len(vector_images) - 1)
+            noise_points.append(vector_images[idx])
+
+        noise_points[0]['pen_state'] = [1, 0, 0]
+        noise_points[-1]['pen_state'] = [1, 0, 0]
+
+        vector_images = vector_images + noise_points
 
     for points in vector_images:
         time = points['timestamp'] - begin_time
@@ -69,5 +82,8 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
     # mask = raster_image == 255
     # raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_JET)
     # raster_image[mask] = 255
+    #
+    # cv2.imshow('raster_image', raster_image)
+    # cv2.waitKey(0)
 
     return raster_image

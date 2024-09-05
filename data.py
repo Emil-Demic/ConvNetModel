@@ -35,7 +35,6 @@ class DatasetTrain(Dataset):
 
         random.seed(42)
 
-
     def increase_strokes_to_remove(self):
         self.strokes_to_remove += 0.01
 
@@ -53,8 +52,8 @@ class DatasetTrain(Dataset):
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
         remove_strokes = random.choice([True, False])
-        if remove_strokes:
-            sketch = drawPNG(json.load(open(sketch_path)), time_frac=self.strokes_to_remove, skip_front=True)
+        if remove_strokes and self.strokes_to_remove > 0.005:
+            sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
         else:
             sketch = drawPNG(json.load(open(sketch_path)))
         sketch = Image.fromarray(sketch)
@@ -74,6 +73,7 @@ class DatasetTrain(Dataset):
             negative = self.transforms_image(negative)
 
         return sketch, image, negative
+
 
 class DatasetTest(Dataset):
     def __init__(self, root, sketch, num_of_users=100, transforms=None):
@@ -170,5 +170,3 @@ class DatasetTest(Dataset):
 #             img = self.transforms(img)
 #
 #         return img
-
-
