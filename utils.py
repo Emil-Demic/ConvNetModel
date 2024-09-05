@@ -67,7 +67,7 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
     raster_image = (1 - cv2.dilate(1 - raster_image, np.ones((3, 3), np.uint8), iterations=1)) * 255
     raster_image = raster_image.astype(np.uint8)
     mask = raster_image == 255
-    raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_JET)
+    raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_TURBO)
     raster_image[mask] = 255
 
     return raster_image
