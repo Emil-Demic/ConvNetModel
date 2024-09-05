@@ -25,7 +25,7 @@ def calculate_accuracy_alt(query_feature_all, image_feature_all):
 
 
 def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
-    raster_image = np.ones((side, side), dtype=np.float32)
+    raster_image = np.ones((side, side), dtype=np.uint8)
     prevX, prevY = None, None
     begin_time = vector_images[0]['timestamp']
     start_time = vector_images[0]['timestamp']
@@ -51,7 +51,7 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
             cordList = list(bresenham(prevX, prevY, x, y))
             for cord in cordList:
                 if (cord[0] > 0 and cord[1] > 0) and (cord[0] < side and cord[1] < side):
-                    raster_image[cord[1], cord[0]] = time / full_time
+                    raster_image[cord[1], cord[0]] = 0
             if pen_state == [0, 1, 0]:
                 prevX = x
                 prevY = y
@@ -65,9 +65,9 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
             prevY = y
     # invert black and white pixels and dialate
     raster_image = (1 - cv2.dilate(1 - raster_image, np.ones((3, 3), np.uint8), iterations=1)) * 255
-    raster_image = raster_image.astype(np.uint8)
-    mask = raster_image == 255
-    raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_JET)
-    raster_image[mask] = 255
+    # raster_image = raster_image.astype(np.uint8)
+    # mask = raster_image == 255
+    # raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_JET)
+    # raster_image[mask] = 255
 
     return raster_image

@@ -2,7 +2,8 @@ import json
 import os
 import random
 
-from PIL import Image
+from PIL import Image, ImageOps
+from PIL.Image import Resampling
 from torch.utils.data import Dataset
 
 from utils import drawPNG
@@ -46,9 +47,14 @@ class DatasetTrain(Dataset):
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
         sketch = drawPNG(json.load(open(sketch_path)))
-        sketch = Image.fromarray(sketch)
-        image = Image.open(image_path)
-        negative = Image.open(negative_path)
+        sketch = Image.fromarray(sketch).convert('RGB')
+        sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
+
+        image = Image.open(image_path).convert('RGB')
+        image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
+
+        negative = Image.open(negative_path).convert('RGB')
+        negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -90,10 +96,12 @@ class DatasetTest(Dataset):
         if self.sketch:
             img_path = os.path.join(self.root, self.files[idx] + ".json")
             img = drawPNG(json.load(open(img_path)))
-            img = Image.fromarray(img)
+            img = Image.fromarray(img).convert('RGB')
+            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-            img = Image.open(img_path)
+            img = Image.open(img_path).convert('RGB')
+            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms is not None:
             img = self.transforms(img)
