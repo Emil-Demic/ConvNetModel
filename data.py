@@ -78,6 +78,8 @@ class DatasetTest(Dataset):
                 if int(file_name) in val_ids:
                     self.files.append(os.path.join(str(i), file_name))
 
+        self.files = sorted(self.files)
+
         self.transforms = transforms
         self.sketch = sketch
 
