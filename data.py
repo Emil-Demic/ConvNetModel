@@ -54,7 +54,7 @@ class DatasetTrain(Dataset):
 
         remove_strokes = random.choice([True, False])
         if remove_strokes:
-            sketch = drawPNG(json.load(open(sketch_path)), time_frac=self.strokes_to_remove * 3.0, skip_front=False)
+            sketch = drawPNG(json.load(open(sketch_path)), time_frac=self.strokes_to_remove, skip_front=True)
         else:
             sketch = drawPNG(json.load(open(sketch_path)))
         sketch = Image.fromarray(sketch)
