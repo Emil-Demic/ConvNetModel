@@ -14,7 +14,8 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
             else:
                 net = convnext_tiny()
-            net.classifier[-1] = Identity()
+            net.avgpool = nn.AdaptiveMaxPool2d((1, 1))
+            net.classifier = Identity()
             num_features = 768
 
         case 'swin':
