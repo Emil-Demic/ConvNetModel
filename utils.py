@@ -42,7 +42,7 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_strok
 
     if add_stroke:
         noise_points = []
-        for _ in range(4):
+        for _ in range(time_frac):
             idx = random.randint(0, len(vector_images) - 1)
             noise_points.append(vector_images[idx])
 
