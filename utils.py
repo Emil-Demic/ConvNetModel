@@ -43,7 +43,7 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False):
             continue
 
         x, y = map(float, points['coordinates'])
-        x = int(x * side);
+        x = int(x * side)
         y = int(y * side)
         pen_state = list(map(int, points['pen_state']))
         if not (prevX is None or prevY is None):
