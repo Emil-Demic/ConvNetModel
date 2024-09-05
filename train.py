@@ -13,16 +13,16 @@ from model import TripletModel
 from utils import calculate_accuracy_alt
 
 transforms = Compose([
-    # RGB(),
-    # Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
+    RGB(),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
-# dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
+# dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
+dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
@@ -63,6 +63,7 @@ for epoch in range(args.epochs):
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
     scheduler.step()
+    dataset_train.increase_strokes_to_remove()
 
     with torch.no_grad():
         model.eval()

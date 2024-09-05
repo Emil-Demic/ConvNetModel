@@ -31,7 +31,13 @@ class DatasetTrain(Dataset):
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
+        self.strokes_to_remove = 0.0
+
         random.seed(42)
+
+
+    def increase_strokes_to_remove(self):
+        self.strokes_to_remove += 0.01
 
     def __len__(self):
         return len(self.files)
@@ -46,15 +52,19 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        sketch = drawPNG(json.load(open(sketch_path)))
-        sketch = Image.fromarray(sketch).convert('RGB')
-        sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
+        remove_strokes = random.choice([True, False])
+        if remove_strokes:
+            sketch = drawPNG(json.load(open(sketch_path)), time_frac=self.strokes_to_remove * 3.0, skip_front=False)
+        else:
+            sketch = drawPNG(json.load(open(sketch_path)))
+        sketch = Image.fromarray(sketch)
+        # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
-        image = Image.open(image_path).convert('RGB')
-        image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
+        image = Image.open(image_path)
+        # image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
 
-        negative = Image.open(negative_path).convert('RGB')
-        negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
+        negative = Image.open(negative_path)
+        # negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -96,12 +106,12 @@ class DatasetTest(Dataset):
         if self.sketch:
             img_path = os.path.join(self.root, self.files[idx] + ".json")
             img = drawPNG(json.load(open(img_path)))
-            img = Image.fromarray(img).convert('RGB')
-            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            img = Image.fromarray(img)
+            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-            img = Image.open(img_path).convert('RGB')
-            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            img = Image.open(img_path)
+            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms is not None:
             img = self.transforms(img)
