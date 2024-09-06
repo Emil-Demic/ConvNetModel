@@ -52,7 +52,7 @@ class DatasetTrain(Dataset):
 
         arr = np.array([True, False])
         remove_strokes = np.random.choice(arr, 1)
-        if False and remove_strokes and self.strokes_to_remove > 0.005:
+        if remove_strokes and self.strokes_to_remove > 0.005:
             print("Removing strokes", flush=True)
             sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=self.strokes_to_remove * 3.0)
         else:
