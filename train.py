@@ -1,24 +1,22 @@
 import random
-import numpy as np
-import torch
-from config import args
-
-random.seed(42)
-np.random.seed(42)
-torch.manual_seed(42)
-if args.cuda:
-    torch.cuda.manual_seed(42)
-
 import tqdm
+import torch
+import numpy as np
+
 from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
-from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
+from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB
 
+from config import args
 from data import DatasetTrain, DatasetTest
 from model import TripletModel
 from utils import calculate_accuracy_alt
+
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
 
 transforms = Compose([
     RGB(),
@@ -47,7 +45,6 @@ loss_fn = TripletMarginLoss(margin=0.2)
 if args.cuda:
     loss_fn.cuda()
 
-
 for epoch in range(args.epochs):
     model.train()
     running_loss = 0.0
@@ -55,7 +52,6 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
         if args.cuda:
             data = [d.cuda() for d in data]
-            # data = data.cuda()
 
         output = model(data)
 
@@ -66,7 +62,7 @@ for epoch in range(args.epochs):
         optimizer.step()
 
         if i % 5 == 4:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss/5:0.5f}')
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5:0.5f}')
             running_loss = 0.0
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
@@ -79,7 +75,6 @@ for epoch in range(args.epochs):
         sketch_output = []
         for data in tqdm.tqdm(dataloader_test_sketch):
             if args.cuda:
-                # data = [d.cuda() for d in data]
                 data = data.cuda()
             out = model.get_embedding(data)
             sketch_output.append(out.cpu().numpy())
@@ -87,7 +82,6 @@ for epoch in range(args.epochs):
         image_output = []
         for data in tqdm.tqdm(dataloader_test_image):
             if args.cuda:
-                # data = [d.cuda() for d in data]
                 data = data.cuda()
             out = model.get_embedding(data)
             image_output.append(out.cpu().numpy())
@@ -101,5 +95,3 @@ for epoch in range(args.epochs):
         print(str(epoch + 1) + ':  top1: ' + str(top1 / float(num)))
         print(str(epoch + 1) + ':  top5: ' + str(top5 / float(num)))
         print(str(epoch + 1) + ': top10: ' + str(top10 / float(num)))
-
-
