@@ -2,6 +2,7 @@ import json
 import os
 import random
 
+import numpy as np
 from PIL import Image, ImageOps
 from PIL.Image import Resampling
 from torch.utils.data import Dataset
@@ -49,7 +50,8 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        remove_strokes = random.choice([True, False])
+        arr = np.array([True, False])
+        remove_strokes = np.random.choice(arr, 1)
         if False and remove_strokes and self.strokes_to_remove > 0.005:
             print("Removing strokes", flush=True)
             sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=self.strokes_to_remove * 3.0)
