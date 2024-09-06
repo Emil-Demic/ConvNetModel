@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import torch
 import tqdm
@@ -12,6 +14,12 @@ from data import DatasetTrain, DatasetTest
 from model import TripletModel
 from utils import calculate_accuracy_alt
 
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
+if args.cuda:
+    torch.cuda.manual_seed(42)
+
 transforms = Compose([
     RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
@@ -25,7 +33,7 @@ dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
 dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
-dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=False, num_workers=4)
+dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True, num_workers=4)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
 

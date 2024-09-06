@@ -33,8 +33,6 @@ class DatasetTrain(Dataset):
 
         self.strokes_to_remove = 0.0
 
-        random.seed(42)
-
     def increase_strokes_to_remove(self):
         self.strokes_to_remove += 0.01
 
