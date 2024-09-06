@@ -33,8 +33,8 @@ class DatasetTrain(Dataset):
 
         self.strokes_to_remove = 0.0
 
-    # def increase_strokes_to_remove(self):
-    #     self.strokes_to_remove += 0.01
+    def increase_strokes_to_remove(self):
+        self.strokes_to_remove += 0.01
 
     def __len__(self):
         return len(self.files)
