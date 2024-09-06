@@ -1,7 +1,14 @@
 import random
-
 import numpy as np
 import torch
+from config import args
+
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
+if args.cuda:
+    torch.cuda.manual_seed(42)
+
 import tqdm
 from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
@@ -9,16 +16,9 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, CenterCrop, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
 
-from config import args
 from data import DatasetTrain, DatasetTest
 from model import TripletModel
 from utils import calculate_accuracy_alt
-
-random.seed(42)
-np.random.seed(42)
-torch.manual_seed(42)
-if args.cuda:
-    torch.cuda.manual_seed(42)
 
 transforms = Compose([
     RGB(),
