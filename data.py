@@ -31,10 +31,10 @@ class DatasetTrain(Dataset):
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
-        self.strokes_to_remove = 0.0
-
-    def increase_strokes_to_remove(self):
-        self.strokes_to_remove += 0.01
+    #     self.strokes_to_remove = 0.0
+    #
+    # def increase_strokes_to_remove(self):
+    #     self.strokes_to_remove += 0.01
 
     def __len__(self):
         return len(self.files)
