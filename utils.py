@@ -40,16 +40,16 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_strok
         else:
             end_time -= (end_time - start_time) * time_frac
 
-    # if add_stroke:
-    #     noise_points = []
-    #     for _ in range(3):
-    #         idx = random.randint(0, len(vector_images) - 1)
-    #         noise_points.append(vector_images[idx])
-    #
-    #     noise_points[0]['pen_state'] = [1, 0, 0]
-    #     noise_points[-1]['pen_state'] = [1, 0, 0]
-    #
-    #     vector_images = vector_images + noise_points
+    if add_stroke:
+        noise_points = []
+        for _ in range(3):
+            idx = random.randint(0, len(vector_images) - 1)
+            noise_points.append(vector_images[idx])
+
+        noise_points[0]['pen_state'] = [1, 0, 0]
+        noise_points[-1]['pen_state'] = [1, 0, 0]
+
+        vector_images = vector_images + noise_points
 
     for points in vector_images:
         time = points['timestamp'] - begin_time
