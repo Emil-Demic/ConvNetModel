@@ -68,9 +68,9 @@ class DatasetTrain(Dataset):
             case 1:
                 sketch = drawPNG(json.load(open(sketch_path)))
             case 2:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.05)
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.03)
             case 3:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.15)
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.10)
             case 4:
                 if self.strokes_to_remove > 0.005:
                     sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
