@@ -19,16 +19,16 @@ np.random.seed(42)
 torch.manual_seed(42)
 
 transforms = Compose([
-    RGB(),
-    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
+    # RGB(),
+    # Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
-# dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
+# dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
+dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
 if args.cuda:

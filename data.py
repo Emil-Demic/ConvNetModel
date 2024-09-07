@@ -62,33 +62,33 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        selection = self.rng.choice([1, 2, 3, 4], p=[0.5, 0.3, 0.15, 0.05])
+        # selection = self.rng.choice([1, 2, 3, 4], p=[0.5, 0.3, 0.15, 0.05])
         # amount = self.rng.random() % 0.1
-        match selection:
-            case 1:
-                sketch = drawPNG(json.load(open(sketch_path)))
-            case 2:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=self.strokes_to_remove)
-            case 3:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=self.strokes_to_remove)
-            case 4:
-                if self.strokes_to_remove > 0.005:
-                    sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
-                else:
-                    sketch = drawPNG(json.load(open(sketch_path)))
-            case _:
-                sketch = drawPNG(json.load(open(sketch_path)))
+        # match selection:
+        #     case 1:
+        #         sketch = drawPNG(json.load(open(sketch_path)))
+        #     case 2:
+        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=self.strokes_to_remove)
+        #     case 3:
+        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=self.strokes_to_remove)
+        #     case 4:
+        #         if self.strokes_to_remove > 0.005:
+        #             sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+        #         else:
+        #             sketch = drawPNG(json.load(open(sketch_path)))
+        #     case _:
+        #         sketch = drawPNG(json.load(open(sketch_path)))
 
-        # sketch = drawPNG(json.load(open(sketch_path)))
+        sketch = drawPNG(json.load(open(sketch_path)))
 
-        sketch = Image.fromarray(sketch)
-        # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
+        sketch = Image.fromarray(sketch).convert('RGB')
+        sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
-        image = Image.open(image_path)
-        # image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
+        image = Image.open(image_path).convert('RGB')
+        image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
 
-        negative = Image.open(negative_path)
-        # negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
+        negative = Image.open(negative_path).convert('RGB')
+        negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -131,12 +131,12 @@ class DatasetTest(Dataset):
         if self.sketch:
             img_path = os.path.join(self.root, self.files[idx] + ".json")
             img = drawPNG(json.load(open(img_path)))
-            img = Image.fromarray(img)
-            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            img = Image.fromarray(img).convert('RGB')
+            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-            img = Image.open(img_path)
-            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            img = Image.open(img_path).convert('RGB')
+            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms is not None:
             img = self.transforms(img)
