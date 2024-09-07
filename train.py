@@ -19,8 +19,8 @@ np.random.seed(42)
 torch.manual_seed(42)
 
 transforms = Compose([
-    # RGB(),
-    # Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
+    RGB(),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -70,6 +70,7 @@ for epoch in range(args.epochs):
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
     scheduler.step()
+    loss_fn.margin += 0.03
     dataset_train.increase_strokes_to_remove()
 
     with torch.no_grad():
