@@ -46,15 +46,21 @@ class DatasetTrain(Dataset):
         sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
-        num_of_neg_samples = 2
-        negative_samples = []
-        for i in range(num_of_neg_samples):
-            negative_idx = random.randint(0, len(self.files) - 1)
-            while negative_idx == idx or negative_idx in negative_samples:
-                negative_idx = random.randint(0, len(self.files) - 1)
+        # num_of_neg_samples = 2
+        # negative_samples = []
+        # for i in range(num_of_neg_samples):
+        #     negative_idx = random.randint(0, len(self.files) - 1)
+        #     while negative_idx == idx or negative_idx in negative_samples:
+        #         negative_idx = random.randint(0, len(self.files) - 1)
+        #
+        #     negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
+        #     negative_samples.append(negative_path)
 
-            negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
-            negative_samples.append(negative_path)
+        negative_idx = random.randint(0, len(self.files) - 1)
+        while negative_idx == idx:
+            negative_idx = random.randint(0, len(self.files) - 1)
+
+        negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
         selection = self.rng.choice([1, 2, 3, 4], p=[0.4, 0.3, 0.2, 0.1])
         # amount = self.rng.random() % 0.1
@@ -81,7 +87,7 @@ class DatasetTrain(Dataset):
         image = Image.open(image_path)
         # image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
 
-        negative = [Image.open(negative_path) for negative_path in negative_samples]
+        negative = Image.open(negative_path)
         # negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
