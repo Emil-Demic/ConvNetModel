@@ -34,6 +34,8 @@ class DatasetTrain(Dataset):
 
         self.strokes_to_remove = 0.0
 
+        self.rng = np.random.default_rng()
+
     def increase_strokes_to_remove(self):
         self.strokes_to_remove += 0.01
 
@@ -50,12 +52,19 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        arr = np.array([True, False])
-        remove_strokes = np.random.choice(arr, 1)
-        if remove_strokes and self.strokes_to_remove > 0.005:
-            sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
-        else:
-            sketch = drawPNG(json.load(open(sketch_path)))
+        selection = self.rng.choice([1, 2, 3, 4], p=[0.4, 0.3, 0.2, 0.1])
+        amount = self.rng.random() % 0.1
+        match selection:
+            case 1:
+                sketch = drawPNG(json.load(open(sketch_path)))
+            case 2:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=amount)
+            case 3:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=amount * 2.0)
+            case 4:
+                sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+            case _:
+                sketch = drawPNG(json.load(open(sketch_path)))
 
         # sketch = drawPNG(json.load(open(sketch_path)))
 
