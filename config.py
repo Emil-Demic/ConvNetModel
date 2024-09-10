@@ -4,7 +4,7 @@ import torch
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
-parser.add_argument('--colormap', action='store_true', default=True,
+parser.add_argument('--colormap', action='store_true', default=False,
                     help='Use RGB sketches instead of BW')
 parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')

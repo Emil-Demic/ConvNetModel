@@ -94,7 +94,7 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_strok
         raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_TURBO)
         raster_image[mask] = 255
 
-    cv2.imshow('raster_image', raster_image)
-    cv2.waitKey(0)
+    # cv2.imshow('raster_image', raster_image)
+    # cv2.waitKey(0)
 
     return raster_image
