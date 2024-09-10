@@ -4,7 +4,6 @@ import random
 
 import numpy as np
 from PIL import Image, ImageOps
-from PIL.Image import Resampling
 from torch.utils.data import Dataset
 
 from utils import drawPNG
@@ -32,12 +31,7 @@ class DatasetTrain(Dataset):
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
-        self.strokes_to_remove = 0.0
-
-        self.rng = np.random.default_rng()
-
-    def increase_strokes_to_remove(self):
-        self.strokes_to_remove += 0.01
+        # self.rng = np.random.default_rng()
 
     def __len__(self):
         return len(self.files)

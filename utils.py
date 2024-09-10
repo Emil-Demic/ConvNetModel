@@ -69,7 +69,6 @@ def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_strok
             cordList = list(bresenham(prevX, prevY, x, y))
             for cord in cordList:
                 if (cord[0] > 0 and cord[1] > 0) and (cord[0] < side and cord[1] < side):
-
                     if args.colormap:
                         raster_image[cord[1], cord[0]] = time / full_time
                     else:
