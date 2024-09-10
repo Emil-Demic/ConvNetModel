@@ -19,8 +19,8 @@ np.random.seed(75)
 torch.manual_seed(75)
 if args.cuda:
     torch.cuda.manual_seed(75)
-    torch.backends.cudnn.benchmark = False
-    torch.use_deterministic_algorithms(True)
+    # torch.backends.cudnn.benchmark = False
+    # torch.use_deterministic_algorithms(True)
 
 transforms = Compose([
     RGB(),
