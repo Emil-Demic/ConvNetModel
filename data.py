@@ -46,16 +46,6 @@ class DatasetTrain(Dataset):
         sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
-        # num_of_neg_samples = 2
-        # negative_samples = []
-        # for i in range(num_of_neg_samples):
-        #     negative_idx = random.randint(0, len(self.files) - 1)
-        #     while negative_idx == idx or negative_idx in negative_samples:
-        #         negative_idx = random.randint(0, len(self.files) - 1)
-        #
-        #     negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
-        #     negative_samples.append(negative_path)
-
         negative_idx = random.randint(0, len(self.files) - 1)
         while negative_idx == idx:
             negative_idx = random.randint(0, len(self.files) - 1)
