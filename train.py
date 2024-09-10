@@ -14,9 +14,9 @@ from data import DatasetTrain, DatasetTest
 from model import TripletModel
 from utils import calculate_accuracy_alt
 
-random.seed(75)
-np.random.seed(75)
-torch.manual_seed(75)
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
 
 transforms = Compose([
     RGB(),
