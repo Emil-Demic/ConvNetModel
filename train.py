@@ -27,8 +27,10 @@ transforms = Compose([
 ])
 
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-# dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
+if args.colormap:
+    dataset_test_sketch = DatasetTest("fscoco/raw_data", True, args.users, transforms)
+else:
+    dataset_test_sketch = DatasetTest("fscoco/raster_sketches", False, args.users, transforms)
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
 if args.cuda:
