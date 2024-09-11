@@ -14,12 +14,12 @@ from data import DatasetTrain, DatasetTest
 from model import TripletModel
 from utils import calculate_accuracy_alt
 
-random.seed(75)
-np.random.seed(75)
-torch.manual_seed(75)
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
 if args.cuda:
-    torch.cuda.manual_seed(75)
-    # torch.backends.cudnn.benchmark = False
+    torch.cuda.manual_seed(42)
+    torch.backends.cudnn.benchmark = False
     # torch.use_deterministic_algorithms(True)
 
 transforms = Compose([
@@ -76,7 +76,7 @@ for epoch in range(args.epochs):
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
     scheduler.step()
-    loss_fn.margin += 0.02
+    # loss_fn.margin += 0.02
 
     with torch.no_grad():
         model.eval()
