@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity
+from torch.nn import Identity, Linear
 import torch.nn.functional as F
 
 
@@ -54,7 +54,8 @@ def get_network(model: str, pretrained: bool):
                 net = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
             else:
                 net = vgg16()
-            net.classifier = Identity()
+            # net.classifier = Identity()
+            net.classifier[-1] = Linear(in_features=4096, out_features=512)
             num_features = 4096
 
     return net, num_features
