@@ -46,19 +46,19 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        # selection = self.rng.choice([1, 2, 3, 4], p=[0.5, 0.2, 0.2, 0.1])
+        selection = self.rng.choice([1, 2, 3, 4], p=[0.5, 0.2, 0.2, 0.1])
         # amount = self.rng.random() % 0.1
-        # match selection:
-        #     case 1:
-        #         sketch = drawPNG(json.load(open(sketch_path)))
-        #     case 2:
-        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.02)
-        #     case 3:
-        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.02)
-        #     case 4:
-        #         sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
-        #     case _:
-        #         sketch = drawPNG(json.load(open(sketch_path)))
+        match selection:
+            case 1:
+                sketch = drawPNG(json.load(open(sketch_path)))
+            case 2:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.02)
+            case 3:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.05)
+            case 4:
+                sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+            case _:
+                sketch = drawPNG(json.load(open(sketch_path)))
 
         # c = self.rng.choice([True, False])
         # if c:
@@ -66,7 +66,7 @@ class DatasetTrain(Dataset):
         # else:
         #     sketch = drawPNG(json.load(open(sketch_path)))
 
-        sketch = drawPNG(json.load(open(sketch_path)))
+        # sketch = drawPNG(json.load(open(sketch_path)))
 
         sketch = Image.fromarray(sketch)
         # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
