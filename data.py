@@ -46,7 +46,7 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        selection = self.rng.choice([1, 2, 3, 4], p=[0.4, 0.2, 0.2, 0.2])
+        selection = self.rng.choice([1, 2, 3, 4], p=[0.3, 0.2, 0.2, 0.3])
         # amount = self.rng.random() % 0.1
         match selection:
             case 1:
