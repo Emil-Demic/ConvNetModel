@@ -76,7 +76,7 @@ for epoch in range(args.epochs):
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
     scheduler.step()
-    # loss_fn.margin += 0.02
+    loss_fn.margin += 0.02
 
     with torch.no_grad():
         model.eval()
