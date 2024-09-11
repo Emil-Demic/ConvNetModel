@@ -11,10 +11,9 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import convnext_tiny
             if pretrained:
                 from torchvision.models import ConvNeXt_Tiny_Weights
-                net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
+                net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT).features
             else:
-                net = convnext_tiny()
-            net.classifier[-1] = Identity()
+                net = convnext_tiny().features
             num_features = 768
 
         case 'swin':
