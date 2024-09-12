@@ -26,7 +26,7 @@ def get_network(model: str, pretrained: bool):
             else:
                 net = swin_v2_t().features
             # net.head = Identity()
-            num_features = 768
+            num_features = 210
 
         case 'maxvit':
             from torchvision.models import maxvit_t
