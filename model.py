@@ -11,11 +11,11 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import convnext_tiny
             if pretrained:
                 from torchvision.models import ConvNeXt_Tiny_Weights
-                net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT)
+                net = convnext_tiny(weights=ConvNeXt_Tiny_Weights.DEFAULT).features
             else:
-                net = convnext_tiny()
+                net = convnext_tiny().features
             # net.classifier[-1] = Linear(in_features=768, out_features=768)
-            net.classifier[-1] = Identity()
+            # net.classifier[-1] = Identity()
             num_features = 768
 
         case 'swin':
@@ -72,9 +72,9 @@ class TripletModel(nn.Module):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
         res3 = self.embedding_net(data[2])
-        # res1 = self.pool(res1).view(-1, self.num_features)
-        # res2 = self.pool(res2).view(-1, self.num_features)
-        # res3 = self.pool(res3).view(-1, self.num_features)
+        res1 = self.pool(res1).view(-1, self.num_features)
+        res2 = self.pool(res2).view(-1, self.num_features)
+        res3 = self.pool(res3).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
         res3 = F.normalize(res3)
@@ -82,6 +82,6 @@ class TripletModel(nn.Module):
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
-        # res = self.pool(res).view(-1, self.num_features)
+        res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
