@@ -47,7 +47,7 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        selection = self.rng.choice([1, 2, 3, 4], p=[0.3, 0.2, 0.2, 0.3])
+        selection = self.rng.choice([1, 2, 3, 4], p=[0.7, 0.1, 0.1, 0.1])
         # # amount = self.rng.random() % 0.1
         # match selection:
         #     case 1:
@@ -63,7 +63,7 @@ class DatasetTrain(Dataset):
 
         c = self.rng.choice([True, False])
         if c:
-            sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.03)
+            sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.08)
         else:
             sketch = drawPNG(json.load(open(sketch_path)))
 
