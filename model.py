@@ -74,13 +74,13 @@ class TripletModel(nn.Module):
         # res1 = self.pool(res1).view(-1, self.num_features)
         # res2 = self.pool(res2).view(-1, self.num_features)
         # res3 = self.pool(res3).view(-1, self.num_features)
-        # res1 = F.normalize(res1)
-        # res2 = F.normalize(res2)
-        # res3 = F.normalize(res3)
+        res1 = F.normalize(res1)
+        res2 = F.normalize(res2)
+        res3 = F.normalize(res3)
         return res1, res2, res3
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
         # res = self.pool(res).view(-1, self.num_features)
-        # res = F.normalize(res)
+        res = F.normalize(res)
         return res
