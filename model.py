@@ -22,10 +22,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import swin_v2_t
             if pretrained:
                 from torchvision.models import Swin_V2_T_Weights
-                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT).features
+                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT)
             else:
-                net = swin_v2_t().features
-            # net.head = Identity()
+                net = swin_v2_t()
+            net.head = Identity()
             num_features = 768
 
         case 'maxvit':
@@ -52,11 +52,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import vgg16
             if pretrained:
                 from torchvision.models import VGG16_Weights
-                net = vgg16(weights=VGG16_Weights.DEFAULT)
+                net = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES).features
             else:
-                net = vgg16()
-            net.classifier[-1] = Linear(in_features=4096, out_features=1024)
-            num_features = 1024
+                net = vgg16().features
+            num_features = 512
 
     return net, num_features
 
