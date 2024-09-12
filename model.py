@@ -26,7 +26,7 @@ def get_network(model: str, pretrained: bool):
             else:
                 net = swin_v2_t().features
             # net.head = Identity()
-            num_features = 210
+            num_features = 768
 
         case 'maxvit':
             from torchvision.models import maxvit_t
@@ -73,6 +73,9 @@ class TripletModel(nn.Module):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
         res3 = self.embedding_net(data[2])
+        res1 = res1.permute(0, 3, 1, 2)
+        res2 = res2.permute(0, 3, 1, 2)
+        res3 = res3.permute(0, 3, 1, 2)
         res1 = self.pool(res1).view(-1, self.num_features)
         res2 = self.pool(res2).view(-1, self.num_features)
         res3 = self.pool(res3).view(-1, self.num_features)
@@ -83,6 +86,7 @@ class TripletModel(nn.Module):
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
+        res = res.permute(0, 3, 1, 2)
         res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
