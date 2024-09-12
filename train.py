@@ -17,10 +17,10 @@ from utils import calculate_accuracy_alt
 random.seed(args.seed)
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
-if args.cuda:
-    torch.cuda.manual_seed(args.seed)
-    torch.backends.cudnn.benchmark = False
-    torch.use_deterministic_algorithms(True, warn_only=True)
+# if args.cuda:
+#     torch.cuda.manual_seed(args.seed)
+#     torch.backends.cudnn.benchmark = False
+#     torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
     RGB(),
