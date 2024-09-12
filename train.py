@@ -39,10 +39,7 @@ else:
 
 dataset_test_image = DatasetTest("fscoco/images", False, args.users, transforms)
 
-if args.cuda:
-    dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True, num_workers=2)
-else:
-    dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
+dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
 
