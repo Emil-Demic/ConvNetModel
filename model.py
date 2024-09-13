@@ -69,9 +69,9 @@ class TripletModel(nn.Module):
         self.pool = AdaptiveAvgPool2d(1)
 
     def forward(self, data):
-        res1 = self.embedding_net(data[0])
-        res2 = self.embedding_net(data[1])
-        res3 = self.embedding_net(data[2])
+        res1 = self.embedding_net(data[0]).permute(0, 3, 1, 2)
+        res2 = self.embedding_net(data[1]).permute(0, 3, 1, 2)
+        res3 = self.embedding_net(data[2]).permute(0, 3, 1, 2)
         res1 = self.pool(res1).view(-1, self.num_features)
         res2 = self.pool(res2).view(-1, self.num_features)
         res3 = self.pool(res3).view(-1, self.num_features)
@@ -81,7 +81,7 @@ class TripletModel(nn.Module):
         return res1, res2, res3
 
     def get_embedding(self, data):
-        res = self.embedding_net(data)
+        res = self.embedding_net(data).permute(0, 3, 1, 2)
         res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
