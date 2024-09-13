@@ -22,10 +22,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import swin_v2_t
             if pretrained:
                 from torchvision.models import Swin_V2_T_Weights
-                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT).features
+                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT)
             else:
-                net = swin_v2_t().features
-            # net.head = Identity()
+                net = swin_v2_t()
+            net.head = Identity()
             num_features = 768
 
         case 'maxvit':
@@ -69,19 +69,19 @@ class TripletModel(nn.Module):
         self.pool = AdaptiveAvgPool2d(1)
 
     def forward(self, data):
-        res1 = self.embedding_net(data[0]).permute(0, 3, 1, 2)
-        res2 = self.embedding_net(data[1]).permute(0, 3, 1, 2)
-        res3 = self.embedding_net(data[2]).permute(0, 3, 1, 2)
-        res1 = self.pool(res1).view(-1, self.num_features)
-        res2 = self.pool(res2).view(-1, self.num_features)
-        res3 = self.pool(res3).view(-1, self.num_features)
+        res1 = self.embedding_net(data[0])
+        res2 = self.embedding_net(data[1])
+        res3 = self.embedding_net(data[2])
+        # res1 = self.pool(res1).view(-1, self.num_features)
+        # res2 = self.pool(res2).view(-1, self.num_features)
+        # res3 = self.pool(res3).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
         res3 = F.normalize(res3)
         return res1, res2, res3
 
     def get_embedding(self, data):
-        res = self.embedding_net(data).permute(0, 3, 1, 2)
-        res = self.pool(res).view(-1, self.num_features)
+        res = self.embedding_net(data)
+        # res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
