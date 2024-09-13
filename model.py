@@ -22,10 +22,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import swin_v2_t
             if pretrained:
                 from torchvision.models import Swin_V2_T_Weights
-                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT)
+                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT).features
             else:
-                net = swin_v2_t()
-            net.head = Identity()
+                net = swin_v2_t().features
+            # net.head = Identity()
             num_features = 768
 
         case 'maxvit':
@@ -66,7 +66,7 @@ class TripletModel(nn.Module):
         net_info = get_network(model, pretrained)
         self.embedding_net = net_info[0]
         self.num_features = net_info[1]
-        self.pool = AdaptiveMaxPool2d(1)
+        self.pool = AdaptiveAvgPool2d(1)
 
     def forward(self, data):
         res1 = self.embedding_net(data[0])
