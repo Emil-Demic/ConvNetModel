@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity, Linear, AdaptiveAvgPool2d, AdaptiveMaxPool2d
+from torch.nn import Identity, Linear, AdaptiveAvgPool2d, AdaptiveMaxPool2d, Sequential, ReLU
 import torch.nn.functional as F
 
 
@@ -66,11 +66,19 @@ class TripletModel(nn.Module):
         self.embedding_net = net_info[0]
         self.num_features = net_info[1]
         self.pool = AdaptiveMaxPool2d(1)
+        self.proj_head = Sequential(
+            Linear(self.num_features, 512),
+            ReLU(),
+            Linear(512, 256),
+        )
 
     def forward(self, data):
         res1 = self.embedding_net(data[0])
+        res1 = self.proj_head(res1)
         res2 = self.embedding_net(data[1])
+        res2 = self.proj_head(res2)
         res3 = self.embedding_net(data[2])
+        res3 = self.proj_head(res3)
         # res1 = self.pool(res1).view(-1, self.num_features)
         # res2 = self.pool(res2).view(-1, self.num_features)
         # res3 = self.pool(res3).view(-1, self.num_features)
