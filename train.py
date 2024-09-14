@@ -54,7 +54,7 @@ scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, la
 # if args.cuda:
 #     loss_fn.cuda()
 
-loss_fn = InfoNCE(temperature=0.2, negative_mode="unpaired")
+loss_fn = InfoNCE(temperature=0.05, negative_mode="unpaired")
 
 for epoch in range(args.epochs):
     model.train()
