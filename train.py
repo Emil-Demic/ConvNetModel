@@ -2,6 +2,7 @@ import random
 import tqdm
 import torch
 import numpy as np
+from info_nce import InfoNCE
 
 from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
@@ -49,9 +50,11 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
-loss_fn = TripletMarginLoss(margin=0.2)
-if args.cuda:
-    loss_fn.cuda()
+# loss_fn = TripletMarginLoss(margin=0.2)
+# if args.cuda:
+#     loss_fn.cuda()
+
+loss_fn = InfoNCE(negative_mode="unpaired")
 
 for epoch in range(args.epochs):
     model.train()
