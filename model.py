@@ -11,10 +11,10 @@ def get_network(model: str, pretrained: bool):
             from torchvision.models import convnext_small
             if pretrained:
                 from torchvision.models import ConvNeXt_Small_Weights
-                net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT).features
+                net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT)
             else:
                 net = convnext_small()
-            # net.classifier[-1] = Identity()
+            net.classifier[-1] = Identity()
             num_features = 768
 
         case 'swin':
@@ -65,7 +65,7 @@ class TripletModel(nn.Module):
         net_info = get_network(model, pretrained)
         self.embedding_net = net_info[0]
         self.num_features = net_info[1]
-        self.pool = AdaptiveAvgPool2d(1)
+        self.pool = AdaptiveMaxPool2d(1)
 
     def forward(self, data):
         res1 = self.embedding_net(data[0])
