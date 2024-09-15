@@ -38,7 +38,7 @@ class DatasetTrain(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".json")
+        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
