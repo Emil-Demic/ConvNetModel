@@ -8,14 +8,14 @@ def get_network(model: str, pretrained: bool):
     num_features = 0
     match model.lower():
         case 'convnext':
-            from torchvision.models import convnext_small
+            from torchvision.models import convnext_base
             if pretrained:
-                from torchvision.models import ConvNeXt_Small_Weights
-                net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT)
+                from torchvision.models import ConvNeXt_Base_Weights
+                net = convnext_base(weights=ConvNeXt_Base_Weights.DEFAULT)
             else:
-                net = convnext_small()
+                net = convnext_base()
             net.classifier[-1] = Identity()
-            num_features = 768
+            num_features = 1024
 
         case 'swin':
             from torchvision.models import swin_v2_t
