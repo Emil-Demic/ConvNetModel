@@ -38,7 +38,7 @@ class DatasetTrain(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
+        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
@@ -66,9 +66,10 @@ class DatasetTrain(Dataset):
         # else:
         #     sketch = drawPNG(json.load(open(sketch_path)))
 
-        sketch = drawPNG(json.load(open(sketch_path)))
+        # sketch = drawPNG(json.load(open(sketch_path)))
 
-        sketch = Image.fromarray(sketch)
+        # sketch = Image.fromarray(sketch)
+        sketch = Image.open(sketch_path)
         # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
         image = Image.open(image_path)
