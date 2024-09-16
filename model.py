@@ -14,7 +14,7 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT)
             else:
                 net = convnext_small()
-            net.classifier[-1] = Identity()
+            net.classifier[-1] = Linear(768, 512)
             num_features = 768
 
         case 'swin':
