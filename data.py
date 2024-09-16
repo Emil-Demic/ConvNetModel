@@ -38,7 +38,7 @@ class DatasetTrain(Dataset):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
+        sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
@@ -47,18 +47,18 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        # selection = self.rng.choice([1, 2, 3], p=[0.4, 0.3, 0.3])
-        # match selection:
-        #     case 1:
-        #         sketch = drawPNG(json.load(open(sketch_path)))
-        #     case 2:
-        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.01)
-        #     case 3:
-        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.08)
-        #     # case 4:
-        #     #     sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
-        #     case _:
-        #         sketch = drawPNG(json.load(open(sketch_path)))
+        selection = self.rng.choice([1, 2, 3], p=[0.6, 0.2, 0.2])
+        match selection:
+            case 1:
+                sketch = drawPNG(json.load(open(sketch_path)))
+            case 2:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.01)
+            case 3:
+                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.08)
+            # case 4:
+            #     sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+            case _:
+                sketch = drawPNG(json.load(open(sketch_path)))
 
         # c = self.rng.choice([True, False], p=[0.7, 0.3])
         # if c:
@@ -68,8 +68,8 @@ class DatasetTrain(Dataset):
 
         # sketch = drawPNG(json.load(open(sketch_path)))
 
-        # sketch = Image.fromarray(sketch)
-        sketch = Image.open(sketch_path)
+        sketch = Image.fromarray(sketch)
+        # sketch = Image.open(sketch_path)
         # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
         image = Image.open(image_path)
