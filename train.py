@@ -106,3 +106,6 @@ for epoch in range(args.epochs):
         print(str(epoch + 1) + ':  top1: ' + str(top1 / float(num)))
         print(str(epoch + 1) + ':  top5: ' + str(top5 / float(num)))
         print(str(epoch + 1) + ': top10: ' + str(top10 / float(num)))
+
+if args.save:
+    torch.save(model.state_dict(), "model.pth")

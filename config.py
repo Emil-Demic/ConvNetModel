@@ -6,6 +6,8 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--colormap', action='store_true', default=False,
                     help='Use RGB sketches instead of BW')
+parser.add_argument('--save', action='store_true', default=False,
+                    help='Save trained model state dict')
 parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.0001,
