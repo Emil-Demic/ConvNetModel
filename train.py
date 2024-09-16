@@ -28,7 +28,7 @@ transforms = Compose([
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
-    Normalize(mean=[0.466, 0.494, 0.447], std=[0.122, 0.116, 0.162])
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
 dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
