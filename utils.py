@@ -15,11 +15,9 @@ def calculate_accuracy_alt(query_feature_all, image_feature_all):
 
     rank = torch.zeros(len(query_feature_all))
     for idx, query_feature in enumerate(query_feature_all):
-        distance = F.cosine_similarity(query_feature.unsqueeze(0), image_feature_all)
-        target_distance = F.cosine_similarity(
+        distance = F.pairwise_distance(query_feature.unsqueeze(0), image_feature_all)
+        target_distance = F.pairwise_distance(
             query_feature.unsqueeze(0), image_feature_all[idx].unsqueeze(0))
-        distance = distance.abs()
-        target_distance = target_distance.abs()
         rank[idx] = distance.le(target_distance).sum()
 
     rank1 = rank.le(1).sum().numpy()
