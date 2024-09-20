@@ -4,6 +4,7 @@ import random
 
 import numpy as np
 from PIL import Image, ImageOps
+from PIL.Image import Resampling
 from torch.utils.data import Dataset
 
 from config import args
@@ -32,13 +33,13 @@ class DatasetTrain(Dataset):
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
-        self.rng = np.random.default_rng(seed=args.seed)
+        # self.rng = np.random.default_rng(seed=args.seed)
 
     def __len__(self):
         return len(self.files)
 
     def __getitem__(self, idx):
-        sketch_path = os.path.join(self.root, "raw_data", self.files[idx] + ".json")
+        sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx] + ".jpg")
         image_path = os.path.join(self.root, "images", self.files[idx] + ".jpg")
 
         negative_idx = random.randint(0, len(self.files) - 1)
@@ -47,18 +48,18 @@ class DatasetTrain(Dataset):
 
         negative_path = os.path.join(self.root, "images", self.files[negative_idx] + ".jpg")
 
-        selection = self.rng.choice([1, 2, 3], p=[0.6, 0.2, 0.2])
-        match selection:
-            case 1:
-                sketch = drawPNG(json.load(open(sketch_path)))
-            case 2:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.02)
-            case 3:
-                sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.08)
-            # case 4:
-            #     sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
-            case _:
-                sketch = drawPNG(json.load(open(sketch_path)))
+        # selection = self.rng.choice([1, 2, 3], p=[0.6, 0.2, 0.2])
+        # match selection:
+        #     case 1:
+        #         sketch = drawPNG(json.load(open(sketch_path)))
+        #     case 2:
+        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.02)
+        #     case 3:
+        #         sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.08)
+        #     # case 4:
+        #     #     sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+        #     case _:
+        #         sketch = drawPNG(json.load(open(sketch_path)))
 
         # c = self.rng.choice([True, False], p=[0.7, 0.3])
         # if c:
@@ -68,15 +69,15 @@ class DatasetTrain(Dataset):
 
         # sketch = drawPNG(json.load(open(sketch_path)))
 
-        sketch = Image.fromarray(sketch)
-        # sketch = Image.open(sketch_path)
-        # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
+        # sketch = Image.fromarray(sketch)
+        sketch = Image.open(sketch_path).convert('RGB')
+        sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
-        image = Image.open(image_path)
-        # image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
+        image = Image.open(image_path).convert('RGB')
+        image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
 
-        negative = Image.open(negative_path)
-        # negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
+        negative = Image.open(negative_path).convert('RGB')
+        negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -123,8 +124,8 @@ class DatasetTest(Dataset):
             # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-            img = Image.open(img_path)
-            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            img = Image.open(img_path).convert('RGB')
+            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms is not None:
             img = self.transforms(img)
