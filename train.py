@@ -24,8 +24,8 @@ torch.manual_seed(args.seed)
 #     torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
-    # RGB(),
-    # Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
+    RGB(),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -51,10 +51,10 @@ if args.cuda:
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
 
-# loss_fn = InfoNCE(negative_mode="unpaired")
-loss_fn = TripletMarginLoss(margin=0.2)
-if args.cuda:
-    loss_fn.cuda()
+loss_fn = InfoNCE(negative_mode="unpaired")
+# loss_fn = TripletMarginLoss(margin=0.2)
+# if args.cuda:
+#     loss_fn.cuda()
 
 for epoch in range(args.epochs):
     model.train()
