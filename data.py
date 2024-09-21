@@ -71,13 +71,13 @@ class DatasetTrain(Dataset):
 
         # sketch = Image.fromarray(sketch)
         sketch = Image.open(sketch_path)
-        sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
+        # sketch = ImageOps.pad(sketch, (224, 224), method=Resampling.BILINEAR)
 
         image = Image.open(image_path)
-        image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
+        # image = ImageOps.pad(image, (224, 224), method=Resampling.BILINEAR)
 
         negative = Image.open(negative_path)
-        negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
+        # negative = ImageOps.pad(negative, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -125,7 +125,7 @@ class DatasetTest(Dataset):
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
             img = Image.open(img_path)
-            img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
+            # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
 
         if self.transforms is not None:
             img = self.transforms(img)
