@@ -51,10 +51,10 @@ if args.cuda:
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
 
-loss_fn = InfoNCE(negative_mode="unpaired")
-# loss_fn = TripletMarginLoss(margin=0.2)
-# if args.cuda:
-#     loss_fn.cuda()
+# loss_fn = InfoNCE(negative_mode="unpaired")
+loss_fn = TripletMarginLoss(margin=0.2)
+if args.cuda:
+    loss_fn.cuda()
 
 for epoch in range(args.epochs):
     model.train()
