@@ -16,15 +16,15 @@ vgg16			553 	1039 	1357 	79.85
 normal			1255 	1984 	2256 	18.49
 unseen
 -margin			859 	1494 	1796 	36.69
--resizeing		1212 1913 2212 19.657667
+-resizing		1212 1913 2212 19.657667
 -layer norm		1300 2006 2271 18.431334
 
 
 
 
 model				top1	top10	meanK	amount_removed
-infoNCE	tiny		164 	271 	4.46	!!5th layer reduce
-infoNCE small		162 	277 	3.91	!!6th layer reduce
+infoNCE small		162 	277 	3.91
+normal val
 
 TINY:
 temp = 0.2			143 	255 	6.02
