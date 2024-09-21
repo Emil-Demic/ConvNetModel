@@ -33,7 +33,7 @@ class DatasetTrain(Dataset):
         self.transforms_sketch = transforms_sketch
         self.transforms_image = transforms_image
 
-        # self.rng = np.random.default_rng(seed=args.seed)
+        self.rng = np.random.default_rng(seed=args.seed)
 
     def __len__(self):
         return len(self.files)
