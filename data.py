@@ -63,7 +63,7 @@ class DatasetTrain(Dataset):
 
         c = self.rng.choice([True, False], p=[0.4, 0.6])
         if c:
-            sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
+            sketch = drawPNG(json.load(open(sketch_path)), skip_front=False, time_frac=0.05)
         else:
             sketch = drawPNG(json.load(open(sketch_path)))
 
