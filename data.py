@@ -61,13 +61,13 @@ class DatasetTrain(Dataset):
         #     case _:
         #         sketch = drawPNG(json.load(open(sketch_path)))
 
-        c = self.rng.choice([True, False], p=[0.4, 0.6])
-        if c:
-            sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.01)
-        else:
-            sketch = drawPNG(json.load(open(sketch_path)))
+        # c = self.rng.choice([True, False], p=[0.4, 0.6])
+        # if c:
+        #     sketch = drawPNG(json.load(open(sketch_path)), skip_front=True, time_frac=0.01)
+        # else:
+        #     sketch = drawPNG(json.load(open(sketch_path)))
 
-        # sketch = drawPNG(json.load(open(sketch_path)))
+        sketch = drawPNG(json.load(open(sketch_path)))
 
         sketch = Image.fromarray(sketch)
         # sketch = Image.open(sketch_path)
