@@ -61,7 +61,7 @@ class DatasetTrain(Dataset):
         #     case _:
         #         sketch = drawPNG(json.load(open(sketch_path)))
 
-        c = self.rng.choice([True, False], p=[0.6, 0.4])
+        c = self.rng.choice([True, False], p=[0.4, 0.6])
         if c:
             sketch = drawPNG(json.load(open(sketch_path)), add_stroke=True)
         else:

@@ -26,7 +26,7 @@ model				top1	top10	meanK	amount_removed
 infoNCE small		162 	277 	3.91
 normal val          144 235 261 4.3206897
 
-add
+add                 141 225 259 4.7586207
 
 temp = 0.2			143 	255 	6.02
 temp = 0.05			156 	274 	4.53
