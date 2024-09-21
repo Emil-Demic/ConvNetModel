@@ -12,12 +12,36 @@ all					146 231 266 4.0448275
 
 3000:
 model			top1	top5	top10	meanK
-vgg16			553     1039    1357    79.85
-normal			1245 	1957 	2211 	18.77
+vgg16			553 	1039 	1357 	79.85
+normal			1255 	1984 	2256 	18.49
 unseen
--margin
--resizing
--layer norm
+-margin			859 	1494 	1796 	36.69
+-resizeing		1212 1913 2212 19.657667
+-layer norm		1300 2006 2271 18.431334
 
-1253 1973 2258 18.901667
-1255 1984 2256 18.491667
+
+
+
+model				top1	top10	meanK	amount_removed
+infoNCE	tiny		164 	271 	4.46	!!5th layer reduce
+infoNCE small		162 	277 	3.91	!!6th layer reduce
+
+TINY:
+temp = 0.2			143 	255 	6.02
+temp = 0.05			156 	274 	4.53
+add 				154 	267 	4.77
+colormap			154 	269 	4.80
+front	0.01		162 	273 	4.41
+		0.02		160 	272 	4.44
+		0.03		159 	269 	4.59
+back	0.03		162 	271 	4.64
+		0.05		160 	272 	4.63
+		0.08		161 	275 	4.55
+		0.10		155 	271 	4.54
+
+all		162 238 272 4.51
+		166 236 270 4.47
+
+
+
+
