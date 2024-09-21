@@ -1,0 +1,23 @@
+model				top1	top10	meanK	amount_removed
+
+unseen user			160 244 273 4.3533335
+normal
+draw	raster		141 228 264 4.12069
+draw	draw		135 221 256 4.862069
+raster	draw		134 228 259 4.7551723
+raster	raster		142 239 267 3.8448277
+
+all					146 231 266 4.0448275
+
+
+3000:
+model			top1	top5	top10	meanK
+vgg16			553     1039    1357    79.85
+normal			1245 	1957 	2211 	18.77
+unseen
+-margin
+-resizing
+-layer norm
+
+1253 1973 2258 18.901667
+1255 1984 2256 18.491667
