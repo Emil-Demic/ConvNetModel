@@ -18,7 +18,7 @@ normal          1432    2123    2371    16.22
 unseen
 -margin         930     1523    1811    38.31
 -resizing       1400    2064    2339    15.94
--convnext       
+-convnext       787     1394    1713    51.77
 
 -layer norm		1300    2006    2271    18.43
 -
