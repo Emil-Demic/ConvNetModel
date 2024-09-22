@@ -2,9 +2,10 @@ model				top1	top10	meanK	amount_removed
 
 unseen user			160 244 273 4.3533335
 normal
-draw	raster		141 228 264 4.12069
+
 draw	draw		135 221 256 4.862069
 raster	draw		134 228 259 4.7551723
+draw	raster		141 228 264 4.12069
 raster	raster		142 239 267 3.8448277
 
 all					146 231 266 4.0448275
