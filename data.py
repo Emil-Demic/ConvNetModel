@@ -70,14 +70,14 @@ class DatasetTrain(Dataset):
         # sketch = drawPNG(json.load(open(sketch_path)))
 
         # sketch = Image.fromarray(sketch)
-        sketch = Image.open(sketch_path).convert('RGB')
-        sketch = ImageOps.pad(sketch, (224, 224))
+        sketch = Image.open(sketch_path)
+        # sketch = ImageOps.pad(sketch, (224, 224))
 
-        image = Image.open(image_path).convert('RGB')
-        image = ImageOps.pad(image, (224, 224))
+        image = Image.open(image_path)
+        # image = ImageOps.pad(image, (224, 224))
 
-        negative = Image.open(negative_path).convert('RGB')
-        negative = ImageOps.pad(negative, (224, 224))
+        negative = Image.open(negative_path)
+        # negative = ImageOps.pad(negative, (224, 224))
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)
@@ -124,8 +124,8 @@ class DatasetTest(Dataset):
             # img = ImageOps.pad(img, (224, 224), method=Resampling.BILINEAR)
         else:
             img_path = os.path.join(self.root, self.files[idx] + ".jpg")
-            img = Image.open(img_path).convert('RGB')
-            img = ImageOps.pad(img, (224, 224))
+            img = Image.open(img_path)
+            # img = ImageOps.pad(img, (224, 224))
 
         if self.transforms is not None:
             img = self.transforms(img)
