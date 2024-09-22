@@ -14,12 +14,14 @@ all					146 231 266 4.0448275
 3000:
 model			top1	top5	top10	meanK
 vgg16			553 	1039 	1357 	79.85
-normal			1255 	1984 	2256 	18.49
+normal
 unseen
 -margin			859 	1494 	1796 	36.69
 -resizing		1212    1913    2212    19.66
+convnext
+
 -layer norm		1300    2006    2271    18.43
--convnext
+-
 
 
 

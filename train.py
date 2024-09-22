@@ -24,7 +24,7 @@ if args.cuda:
     torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
-    RGB(),
+    # RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
