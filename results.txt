@@ -7,6 +7,9 @@ unseen
 -resizing       1400    2064    2339    15.94
 -convnext       787     1394    1713    51.77
 
+unseen 0.05
+178 243 272 4.983333
+
 
 
 OTHR:
