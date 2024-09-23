@@ -1,3 +1,15 @@
+3000:
+model			top1	top5	top10	meanK
+vgg16			553 	1039 	1357 	79.85
+normal          1432    2123    2371    16.22
+unseen
+-margin         930     1523    1811    38.31
+-resizing       1400    2064    2339    15.94
+-convnext       787     1394    1713    51.77
+
+
+
+OTHR:
 model				top1	top10	meanK	amount_removed
 
 unseen user			160 244 273 4.3533335
@@ -9,22 +21,6 @@ draw	raster		141 228 264 4.12069
 raster	raster		142 239 267 3.8448277
 
 all					146 231 266 4.0448275
-
-
-3000:
-model			top1	top5	top10	meanK
-vgg16			553 	1039 	1357 	79.85
-normal          1432    2123    2371    16.22
-unseen
--margin         930     1523    1811    38.31
--resizing       1400    2064    2339    15.94
--convnext       787     1394    1713    51.77
-
--layer norm		1300    2006    2271    18.43
--
-
-
-
 
 model				top1	top10	meanK	amount_removed
 infoNCE small		162 	277 	3.91
