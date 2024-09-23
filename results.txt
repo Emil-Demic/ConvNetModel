@@ -2,13 +2,10 @@
 model			top1	top5	top10	meanK
 vgg16			553 	1039 	1357 	79.85
 normal          1432    2123    2371    16.22
-unseen
+unseen          1454    2142    2392    16.988333
 -margin         930     1523    1811    38.31
 -resizing       1400    2064    2339    15.94
 -convnext       787     1394    1713    51.77
-
-unseen 0.05
-178 243 272 4.983333
 
 
 
