@@ -66,7 +66,9 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss_fn(output[0], output[1], output[2])
+        mask = ~(output[1] == output[2]).all(dim=1)
+
+        loss = loss_fn(output[0], output[1], output[2][mask])
 
         running_loss += loss.item()
         loss.backward()
