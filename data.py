@@ -18,7 +18,7 @@ class DatasetTrain(Dataset):
 
         self.root = root
 
-        with open(os.path.join(self.root, 'val_unseen_user.txt'), 'r') as f:
+        with open(os.path.join(self.root, 'val_normal.txt'), 'r') as f:
             lines = f.readlines()
             val_ids = list(map(int, lines))
 
@@ -96,7 +96,7 @@ class DatasetTest(Dataset):
 
         self.root = root
 
-        with open(os.path.join(self.root, "..", 'val_unseen_user.txt'), 'r') as f:
+        with open(os.path.join(self.root, "..", 'val_normal.txt'), 'r') as f:
             lines = f.readlines()
             val_ids = list(map(int, lines))
 

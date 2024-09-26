@@ -33,6 +33,7 @@ parser.add_argument('--head', type=int, default=8)
 parser.add_argument('--number', type=int, default=1)
 parser.add_argument('--pretrained', default=True, action='store_false')
 parser.add_argument('--anchor_number', '-a', type=int, default=49)
+parser.add_argument('--retrieval', '-r', type=str, default='sa', choices=['rn', 'sa'])
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()

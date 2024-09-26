@@ -93,12 +93,14 @@ for epoch in range(args.epochs):
             if args.cuda:
                 data = data.cuda()
             out = model(data, None, 'test', only_sa=True)
+            out = out[0][:, 0]
             sketch_output.append(out.cpu().numpy())
 
         image_output = []
         for data in tqdm.tqdm(dataloader_test_image):
             if args.cuda:
                 data = data.cuda()
+            out = out[0][:, 0]
             out = model(data, None, 'test', only_sa=True)
             image_output.append(out.cpu().numpy())
 
