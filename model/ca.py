@@ -149,7 +149,6 @@ class Cross_Attention(nn.Module):
     def __init__(self, args, h=8, n=1, d_model=768, d_ff=1024, dropout=0.1):
         super(Cross_Attention, self).__init__()
         self.args = args
-        self.batch = args.batch
         multi_head_attention = MultiHeadedAttention(h, d_model)
         ffn = PositionwiseFeedForward(d_model, d_ff, dropout)
         encoderLayer = EncoderLayer(d_model, multi_head_attention, ffn, dropout)
