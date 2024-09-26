@@ -67,7 +67,7 @@ for epoch in range(args.epochs):
         if args.cuda:
             sk, im = sk.cuda(), im.cuda()
 
-        cls_fea, rn_scores = model(sk, im)
+        cls_fea = model(sk, im)
 
         sk_p = cls_fea[0:args.batch]
         im_p = cls_fea[2 * args.batch:3 * args.batch]
