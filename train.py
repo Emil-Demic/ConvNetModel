@@ -101,8 +101,8 @@ for epoch in range(args.epochs):
         for data in tqdm.tqdm(dataloader_test_image):
             if args.cuda:
                 data = data.cuda()
-            out = out[0][:, 0]
             out = model(data, None, 'test', only_sa=True)
+            out = out[0][:, 0]
             image_output.append(out.cpu().numpy())
 
         sketch_output = np.concatenate(sketch_output)
