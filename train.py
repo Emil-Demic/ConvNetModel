@@ -92,14 +92,14 @@ for epoch in range(args.epochs):
         for data in tqdm.tqdm(dataloader_test_sketch):
             if args.cuda:
                 data = data.cuda()
-            out = model.get_embedding(data)
+            out = model(data, None, 'test', only_sa=True)
             sketch_output.append(out.cpu().numpy())
 
         image_output = []
         for data in tqdm.tqdm(dataloader_test_image):
             if args.cuda:
                 data = data.cuda()
-            out = model.get_embedding(data)
+            out = model(data, None, 'test', only_sa=True)
             image_output.append(out.cpu().numpy())
 
         sketch_output = np.concatenate(sketch_output)
