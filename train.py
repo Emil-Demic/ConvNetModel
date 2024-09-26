@@ -69,10 +69,10 @@ for epoch in range(args.epochs):
 
         cls_fea = model(sk, im)
 
-        print(cls_fea.size())
-        sk_p = cls_fea[0:args.batch_size]
-        im_p = cls_fea[2 * args.batch_size:3 * args.batch_size]
-        im_n = cls_fea[3 * args.batch_size:]
+        size = cls_fea.shape[0] // 4
+        sk_p = cls_fea[0:size]
+        im_p = cls_fea[2 * size:3 * size]
+        im_n = cls_fea[3 * size:]
         loss = loss_fn(sk_p, im_p, im_n) * 2
 
         running_loss += loss.item()
