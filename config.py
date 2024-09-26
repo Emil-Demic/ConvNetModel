@@ -25,5 +25,14 @@ parser.add_argument('--users', type=int, default=10,
 parser.add_argument('--seed', type=int, default=42,
                     help='Seed for reproducibility.')
 
+# model
+parser.add_argument('--cls_number', type=int, default=100)
+parser.add_argument('--d_model', type=int, default=768)
+parser.add_argument('--d_ff', type=int, default=1024)
+parser.add_argument('--head', type=int, default=8)
+parser.add_argument('--number', type=int, default=1)
+parser.add_argument('--pretrained', default=True, action='store_false')
+parser.add_argument('--anchor_number', '-a', type=int, default=49)
+
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()

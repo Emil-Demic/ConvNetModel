@@ -12,8 +12,9 @@ from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDty
 
 from config import args
 from data import DatasetTrain, DatasetTest
-from model import TripletModel
 from utils import calculate_accuracy_alt
+from model.model import Model
+
 
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -44,7 +45,7 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
 dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
 
-model = TripletModel(args.model)
+model = Model(args)
 if args.cuda:
     model.cuda()
 
@@ -61,12 +62,17 @@ for epoch in range(args.epochs):
     running_loss = 0.0
     for i, data in enumerate(dataloader_train):
         optimizer.zero_grad()
+        sk = torch.cat((data[0], data[0]))
+        im = torch.cat((data[1], data[2]))
         if args.cuda:
-            data = [d.cuda() for d in data]
+            sk, im = sk.cuda(), im.cuda()
 
-        output = model(data)
+        cls_fea, rn_scores = model(sk, im)
 
-        loss = loss_fn(output[0], output[1], output[2])
+        sk_p = cls_fea[0:args.batch]
+        im_p = cls_fea[2 * args.batch:3 * args.batch]
+        im_n = cls_fea[3 * args.batch:]
+        loss = loss_fn(sk_p, im_p, im_n) * 2
 
         running_loss += loss.item()
         loss.backward()
