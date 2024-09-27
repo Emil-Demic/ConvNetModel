@@ -11,3 +11,4 @@ ChairV2_Coordinate
 README.txt
 streamlit-app/model.pth
 /streamlit-app/__pycache__
+result.html
