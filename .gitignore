@@ -5,8 +5,8 @@
 /__pycache__
 /fscoco
 tmp.py
-/streamlit-app
 /ChairV2
 /ShoeV2
 ChairV2_Coordinate
 README.txt
+streamlit-app/model.pth
