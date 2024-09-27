@@ -101,7 +101,7 @@ for epoch in range(args.epochs):
 
         dis = compute_view_specific_distance(sketch_output, image_output)
 
-        top1, top5, top10, top20 = calculate_accuracy(dis, dataset_test_image.get_file_names())
+        top1, top5, top10 = calculate_accuracy(dis, dataset_test_image.get_file_names())
         print("top1, top5, top10:", top1, top5, top10)
 
         top1, top5, top10, meanK = calculate_accuracy_alt(sketch_output, image_output)
