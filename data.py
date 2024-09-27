@@ -113,6 +113,10 @@ class DatasetTest(Dataset):
         self.transforms = transforms
         self.sketch = sketch
 
+
+    def get_file_names(self):
+        return self.files
+
     def __len__(self):
         return len(self.files)
 

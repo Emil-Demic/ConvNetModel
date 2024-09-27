@@ -13,7 +13,7 @@ from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDty
 from config import args
 from data import DatasetTrain, DatasetTest
 from model import TripletModel
-from utils import calculate_accuracy_alt
+from utils import calculate_accuracy_alt, compute_view_specific_distance, calculate_accuracy
 
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -98,6 +98,11 @@ for epoch in range(args.epochs):
 
         sketch_output = np.concatenate(sketch_output)
         image_output = np.concatenate(image_output)
+
+        dis = compute_view_specific_distance(sketch_output, image_output)
+
+        top1, top5, top10, top20 = calculate_accuracy(dis, dataset_test_image.get_file_names())
+        print("top1, top5, top10:", top1, top5, top10)
 
         top1, top5, top10, meanK = calculate_accuracy_alt(sketch_output, image_output)
         num = sketch_output.shape[0]
