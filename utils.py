@@ -15,21 +15,21 @@ def compute_view_specific_distance(sketch_feats, image_feats):
 
 
 def outputHtml(sketchindex, indexList, file_names):
-    imageNameList = shuffleListTest
+    imageNameList = file_names
     sketchPath = os.path.join("fscoco", "raster_sketches")
     imgPath = os.path.join("fscoco", "images")
 
     tmpLine = "<tr>"
 
     tmpLine += "<td><image src='%s' width=256 /></td>" % (
-        os.path.join(sketchPath, str(shuffleListTest[sketchindex]).zfill(12) + ".jpg"))
+        os.path.join(sketchPath, str(file_names[sketchindex]) + ".jpg"))
     for i in indexList:
         if i != sketchindex:
             tmpLine += "<td><image src='%s' width=256 /></td>" % (
-                os.path.join(imgPath, str(imageNameList[i]).zfill(12) + ".jpg"))
+                os.path.join(imgPath, str(imageNameList[i]) + ".jpg"))
         else:
             tmpLine += "<td ><image src='%s' width=256   style='border:solid 2px red' /></td>" % (
-                os.path.join(imgPath, str(imageNameList[i]).zfill(12) + ".jpg"))
+                os.path.join(imgPath, str(imageNameList[i]) + ".jpg"))
 
     return tmpLine + "</tr>"
 
