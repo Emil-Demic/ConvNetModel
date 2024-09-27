@@ -45,10 +45,11 @@ canvas_result = st_canvas(
     width=512,
     drawing_mode="freedraw",
     key="canvas",
-)
+)   
 
 if st.button("Generate Embedding"):
     if canvas_result.image_data is not None:
+        st.write("generating embeddings")
         # Convert the drawn image to a PIL image
         img = Image.fromarray((canvas_result.image_data[:, :, :3]).astype(np.uint8))
 

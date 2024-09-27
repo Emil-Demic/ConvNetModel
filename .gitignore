@@ -10,3 +10,4 @@ tmp.py
 ChairV2_Coordinate
 README.txt
 streamlit-app/model.pth
+/streamlit-app/__pycache__
