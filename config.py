@@ -4,8 +4,6 @@ import torch
 parser = argparse.ArgumentParser()
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
-parser.add_argument('--colormap', action='store_true', default=False,
-                    help='Use RGB sketches instead of BW')
 parser.add_argument('--save', action='store_true', default=False,
                     help='Save trained model state dict')
 parser.add_argument('--epochs', type=int, default=20,
@@ -20,7 +18,7 @@ parser.add_argument('--lr_scheduler_step', type=int, default=5,
                     help='Number of steps for learning rate scheduler.')
 parser.add_argument("--model", type=str, default='convnext',
                     help="Name of the model to use for feature extraction.")
-parser.add_argument('--users', type=int, default=10,
+parser.add_argument('--users', type=int, default=1,
                     help='Number of users from dataset to use')
 parser.add_argument('--seed', type=int, default=42,
                     help='Seed for reproducibility.')

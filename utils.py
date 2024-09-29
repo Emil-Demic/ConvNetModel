@@ -1,14 +1,8 @@
 import os
-import random
-
-import cv2
-import numpy as np
 import torch
 import torch.nn.functional as F
-from bresenham import bresenham
 import scipy.spatial.distance as ssd
 
-from config import args
 
 def compute_view_specific_distance(sketch_feats, image_feats):
     return ssd.cdist(sketch_feats, image_feats, 'sqeuclidean')
@@ -85,74 +79,3 @@ def calculate_accuracy_alt(query_feature_all, image_feature_all):
     rankM = rank.mean().numpy()
 
     return rank1, rank5, rank10, rankM
-
-
-def drawPNG(vector_images, side=256, time_frac=None, skip_front=False, add_stroke=False):
-    if args.colormap:
-        raster_image = np.ones((side, side), dtype=np.float32)
-    else:
-        raster_image = np.ones((side, side), dtype=np.uint8)
-    prevX, prevY = None, None
-    begin_time = vector_images[0]['timestamp']
-    start_time = vector_images[0]['timestamp']
-    end_time = vector_images[-1]['timestamp']
-    full_time = end_time - begin_time
-
-    if time_frac:
-        if skip_front:
-            start_time = (end_time - start_time) * time_frac
-        else:
-            end_time -= (end_time - start_time) * time_frac
-
-    if add_stroke:
-        noise_points = []
-        for _ in range(3):
-            idx = random.randint(0, len(vector_images) - 1)
-            noise_points.append(vector_images[idx])
-
-        noise_points[0]['pen_state'] = [1, 0, 0]
-        noise_points[-1]['pen_state'] = [1, 0, 0]
-
-        vector_images = vector_images + noise_points
-
-    for points in vector_images:
-        time = points['timestamp'] - begin_time
-        if not (start_time <= time <= end_time):
-            continue
-
-        x, y = map(float, points['coordinates'])
-        x = int(x * side)
-        y = int(y * side)
-        pen_state = list(map(int, points['pen_state']))
-        if not (prevX is None or prevY is None):
-            cordList = list(bresenham(prevX, prevY, x, y))
-            for cord in cordList:
-                if (cord[0] > 0 and cord[1] > 0) and (cord[0] < side and cord[1] < side):
-                    if args.colormap:
-                        raster_image[cord[1], cord[0]] = time / full_time
-                    else:
-                        raster_image[cord[1], cord[0]] = 0
-            if pen_state == [0, 1, 0]:
-                prevX = x
-                prevY = y
-            elif pen_state == [1, 0, 0]:
-                prevX = None
-                prevY = None
-            else:
-                raise ValueError('pen_state not accounted for')
-        else:
-            prevX = x
-            prevY = y
-    # invert black and white pixels and dialate
-    raster_image = (1 - cv2.dilate(1 - raster_image, np.ones((3, 3), np.uint8), iterations=1)) * 255
-
-    if args.colormap:
-        raster_image = raster_image.astype(np.uint8)
-        mask = raster_image == 255
-        raster_image = cv2.applyColorMap(raster_image, cv2.COLORMAP_TURBO)
-        raster_image[mask] = 255
-
-    # cv2.imshow('raster_image', raster_image)
-    # cv2.waitKey(0)
-
-    return raster_image

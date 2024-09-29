@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity, Linear, AdaptiveAvgPool2d, AdaptiveMaxPool2d, Sequential, ReLU
+from torch.nn import Identity, AdaptiveAvgPool2d, AdaptiveMaxPool2d
 import torch.nn.functional as F
 
 
@@ -14,17 +14,15 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT).features
             else:
                 net = convnext_small().features
-            # net.classifier[-1] = Identity()
             num_features = 768
 
         case 'swin':
             from torchvision.models import swin_v2_t
             if pretrained:
                 from torchvision.models import Swin_V2_T_Weights
-                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT)
+                net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT).features
             else:
                 net = swin_v2_t()
-            net.head = Identity()
             num_features = 768
 
         case 'maxvit':
@@ -34,7 +32,7 @@ def get_network(model: str, pretrained: bool):
                 net = maxvit_t(weights=MaxVit_T_Weights.DEFAULT)
             else:
                 net = maxvit_t()
-            net.classifier[-1] = Identity()
+            net.classifier = Identity()
             num_features = 512
 
         case 'vit':
