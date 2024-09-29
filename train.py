@@ -25,7 +25,7 @@ if args.cuda:
 
 transforms = Compose([
     RGB(),
-    Resize((256, 256), interpolation=InterpolationMode.BICUBIC),
+    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
