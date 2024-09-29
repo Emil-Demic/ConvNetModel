@@ -25,7 +25,7 @@ if args.cuda:
 
 transforms = Compose([
     RGB(),
-    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
+    Resize((256, 256), interpolation=InterpolationMode.BICUBIC),
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -61,11 +61,11 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        # mask = ~(output[1] == output[2]).all(dim=1)
-        #
-        # loss = loss_fn(output[0], output[1], output[2][mask])
+        mask = ~(output[1] == output[2]).all(dim=1)
 
-        loss = loss_fn(output[0], output[1], output[2])
+        loss = loss_fn(output[0], output[1], output[2][mask])
+
+        # loss = loss_fn(output[0], output[1], output[2])
 
         running_loss += loss.item()
         loss.backward()
