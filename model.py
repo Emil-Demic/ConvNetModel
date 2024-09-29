@@ -62,7 +62,6 @@ class TripletModel(nn.Module):
         super(TripletModel, self).__init__()
         net_info = get_network(model, pretrained)
         self.embedding_net = net_info[0]
-        self.embedding_net.half()
         self.num_features = net_info[1]
         self.pool = AdaptiveAvgPool2d(1)
 
