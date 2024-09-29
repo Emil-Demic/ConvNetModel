@@ -44,7 +44,7 @@ if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
+scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.2, last_epoch=-1)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 # loss_fn = TripletMarginLoss(margin=0.2)
