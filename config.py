@@ -16,7 +16,7 @@ parser.add_argument('--batch_size', type=int, default=5,
                     help='Number of samples in each batch.')
 parser.add_argument('--lr_scheduler_step', type=int, default=5,
                     help='Number of steps for learning rate scheduler.')
-parser.add_argument("--model", type=str, default='vit',
+parser.add_argument("--model", type=str, default='swin',
                     help="Name of the model to use for feature extraction.")
 parser.add_argument('--users', type=int, default=10,
                     help='Number of users from dataset to use')
