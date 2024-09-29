@@ -22,18 +22,8 @@ def get_network(model: str, pretrained: bool):
                 from torchvision.models import Swin_V2_T_Weights
                 net = swin_v2_t(weights=Swin_V2_T_Weights.DEFAULT).features
             else:
-                net = swin_v2_t()
+                net = swin_v2_t().features
             num_features = 768
-
-        case 'maxvit':
-            from torchvision.models import maxvit_t
-            if pretrained:
-                from torchvision.models import MaxVit_T_Weights
-                net = maxvit_t(weights=MaxVit_T_Weights.DEFAULT)
-            else:
-                net = maxvit_t()
-            net.classifier = Identity()
-            num_features = 512
 
         case 'vit':
             from torchvision.models import vit_b_16
@@ -69,9 +59,9 @@ class TripletModel(nn.Module):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
         res3 = self.embedding_net(data[2])
-        res1 = self.pool(res1).view(-1, self.num_features)
-        res2 = self.pool(res2).view(-1, self.num_features)
-        res3 = self.pool(res3).view(-1, self.num_features)
+        # res1 = self.pool(res1).view(-1, self.num_features)
+        # res2 = self.pool(res2).view(-1, self.num_features)
+        # res3 = self.pool(res3).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
         res3 = F.normalize(res3)
@@ -79,6 +69,6 @@ class TripletModel(nn.Module):
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
-        res = self.pool(res).view(-1, self.num_features)
+        # res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
