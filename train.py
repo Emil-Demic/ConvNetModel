@@ -41,6 +41,7 @@ dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_siz
 
 model = TripletModel(args.model)
 if args.cuda:
+    # opt_model = torch.compile(model)
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -76,7 +77,7 @@ for epoch in range(args.epochs):
 
     end.record()
     torch.cuda.synchronize()
-    print(start.elapsed_time(end) / 1000)
+    print(f"Time: {start.elapsed_time(end) / 1000}")
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
     scheduler.step()

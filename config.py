@@ -18,7 +18,7 @@ parser.add_argument('--lr_scheduler_step', type=int, default=5,
                     help='Number of steps for learning rate scheduler.')
 parser.add_argument("--model", type=str, default='convnext',
                     help="Name of the model to use for feature extraction.")
-parser.add_argument('--users', type=int, default=1,
+parser.add_argument('--users', type=int, default=10,
                     help='Number of users from dataset to use')
 parser.add_argument('--seed', type=int, default=42,
                     help='Seed for reproducibility.')
