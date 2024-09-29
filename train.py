@@ -42,7 +42,6 @@ dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_siz
 model = TripletModel(args.model)
 if args.cuda:
     model.cuda()
-    model.half()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.1, last_epoch=-1)
