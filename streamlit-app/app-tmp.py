@@ -20,9 +20,9 @@ transforms = Compose([
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-gallery_embeddings = np.load('val_unseen_user_emb.npy')  # Shape (N, embedding_dim)
+gallery_embeddings = np.load('imagenet_a_emb.npy')  # Shape (N, embedding_dim)
 # gallery_embeddings = torch.from_numpy(gallery_embeddings)
-gallery_image_paths = np.load('val_unseen_user_paths.npy')  # Shape (N,)
+gallery_image_paths = np.load('imagenet_a_paths.npy')  # Shape (N,)
 
 def find_similar_embeddings(query_embedding, gallery_embeddings, top_k=10):
     query_embedding = torch.from_numpy(query_embedding).float()

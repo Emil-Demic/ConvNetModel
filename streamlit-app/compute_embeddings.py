@@ -12,16 +12,24 @@ from model import TripletModel
 
 img_paths = []
 
-with open("../fscoco/val_normal.txt", "r") as f:
-    val_files = f.readlines()
+# with open("../fscoco/val_normal.txt", "r") as f:
+#     val_files = f.readlines()
 
-val_files = [int(i) for i in val_files]
-for i in range(1, 101):
-    path_to_dir = os.path.join("../fscoco", "images", str(i))
+# val_files = [int(i) for i in val_files]
+# for i in range(1, 101):
+#     path_to_dir = os.path.join("../fscoco", "images", str(i))
+#     files_in_dir = os.listdir(path_to_dir)
+#     for filename in files_in_dir:
+#         if int(filename.split(".")[0]) in val_files:
+#             img_paths.append(os.path.join(path_to_dir, filename))
+
+folders = os.listdir('../imagenet-a')
+folders.remove("README.txt")
+for folder in folders[:20]:
+    path_to_dir = os.path.join("../imagenet-a", folder)
     files_in_dir = os.listdir(path_to_dir)
     for filename in files_in_dir:
-        if int(filename.split(".")[0]) in val_files:
-            img_paths.append(os.path.join(path_to_dir, filename))
+        img_paths.append(os.path.join(path_to_dir, filename))
 
 
 model = TripletModel("convnext")
@@ -51,8 +59,8 @@ print("Time: ", elapsed_time)
 
 img_embeds = np.stack(img_embeds)
 img_paths = np.stack(img_paths)
-np.save("val_unseen_user_emb.npy", img_embeds)
-np.save("val_unseen_user_paths.npy", img_paths)
+np.save("imagenet_a_emb.npy", img_embeds)
+np.save("imagenet_a_paths.npy", img_paths)
 
 
 
