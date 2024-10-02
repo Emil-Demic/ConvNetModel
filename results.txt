@@ -1,49 +1,4 @@
-3000:
-model			top1	top5	top10	meanK
-vgg16			553 	1039 	1357 	79.85
-normal          1432    2123    2371    16.22
-unseen          1454    2142    2392    16.988333
--margin         930     1523    1811    38.31
--resizing       1400    2064    2339    15.94
--convnext       787     1394    1713    51.77
 
-
-
-OTHR:
-model				top1	top10	meanK	amount_removed
-
-unseen user			160 244 273 4.3533335
-normal
-
-draw	draw		135 221 256 4.862069
-raster	draw		134 228 259 4.7551723
-draw	raster		141 228 264 4.12069
-raster	raster		142 239 267 3.8448277
-
-all					146 231 266 4.0448275
-
-model				top1	top10	meanK	amount_removed
-infoNCE small		162 	277 	3.91
-
-normal val          144     261     4.32
-
-add                 141     259     4.76
-back    0.05        146     265     4.36
-        0.03        142     260     4.56
-        0.08        146     264     4.3
-
-front   0.02        143     262     4.57
-        0.01        147     264     4.45
-
-temp    0.07        154 241 266 3.9448276
-        0.05        156 242 266 3.7793102
-
-all                 153 239 264 3.6862068
-all - temp          148 241 266 4.0034485
-
-
-convnext    78 111 130 4.5448275
-vit         51 109 125 6.317241
 
 
 

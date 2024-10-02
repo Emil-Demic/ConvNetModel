@@ -11,8 +11,8 @@ from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB
 
 from config import args
-from data import DatasetTrain, DatasetTest
-from model import TripletModel
+from data import DatasetFSCOCO
+from model import SbirModel
 from utils import calculate_accuracy_alt, compute_view_specific_distance, calculate_accuracy
 
 random.seed(args.seed)
@@ -31,20 +31,17 @@ transforms = Compose([
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-dataset_train = DatasetTrain("fscoco", args.users, transforms, transforms)
-dataset_test_sketch = DatasetTest("fscoco/raster_sketches", args.users, transforms)
-dataset_test_image = DatasetTest("fscoco/images", args.users, transforms)
+dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
+dataset_val = DatasetFSCOCO("fscoco", "val", args.users, transforms, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
-dataloader_test_sketch = DataLoader(dataset_test_sketch, batch_size=args.batch_size * 3, shuffle=False)
-dataloader_test_image = DataLoader(dataset_test_image, batch_size=args.batch_size * 3, shuffle=False)
+dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
-model = TripletModel(args.model)
+model = SbirModel(args.model)
 if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-scheduler = lr_scheduler.StepLR(optimizer, args.lr_scheduler_step, gamma=0.2, last_epoch=-1)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 # loss_fn = TripletMarginLoss(margin=0.2)
@@ -55,52 +52,43 @@ for epoch in range(args.epochs):
     model.train()
     running_loss = 0.0
     for i, data in enumerate(dataloader_train):
-        optimizer.zero_grad()
         if args.cuda:
             data = [d.cuda() for d in data]
 
         output = model(data)
 
-        mask = ~(output[1] == output[2]).all(dim=1)
-
-        loss = loss_fn(output[0], output[1], output[2][mask])
-
-        # loss = loss_fn(output[0], output[1], output[2])
+        loss = loss_fn(output[0], output[1])
 
         running_loss += loss.item()
         loss.backward()
         optimizer.step()
+        optimizer.zero_grad()
 
         if i % 5 == 4:
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5:0.5f}')
             running_loss = 0.0
 
-    print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
-    scheduler.step()
+    # print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
 
     with torch.no_grad():
         model.eval()
 
         sketch_output = []
-        for data in tqdm.tqdm(dataloader_test_sketch):
-            if args.cuda:
-                data = data.cuda()
-            out = model.get_embedding(data)
-            sketch_output.append(out.cpu().numpy())
-
         image_output = []
-        for data in tqdm.tqdm(dataloader_test_image):
+        for data in tqdm.tqdm(dataloader_val):
             if args.cuda:
-                data = data.cuda()
-            out = model.get_embedding(data)
-            image_output.append(out.cpu().numpy())
+                data = [d.cuda() for d in data]
+
+            output = model(data)
+            sketch_output.append(output[0].cpu().numpy())
+            image_output.append(output[1].cpu().numpy())
 
         sketch_output = np.concatenate(sketch_output)
         image_output = np.concatenate(image_output)
 
         dis = compute_view_specific_distance(sketch_output, image_output)
 
-        top1, top5, top10 = calculate_accuracy(dis, dataset_test_image.get_file_names())
+        top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
         print("top1, top5, top10:", top1, top5, top10)
 
         top1, top5, top10, meanK = calculate_accuracy_alt(sketch_output, image_output)

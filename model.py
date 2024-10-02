@@ -38,9 +38,9 @@ def get_network(model: str, pretrained: bool):
     return net, num_features
 
 
-class TripletModel(nn.Module):
+class SbirModel(nn.Module):
     def __init__(self, model, pretrained=True):
-        super(TripletModel, self).__init__()
+        super(SbirModel, self).__init__()
         net_info = get_network(model, pretrained)
         self.model = model
         self.embedding_net = net_info[0]
@@ -53,15 +53,12 @@ class TripletModel(nn.Module):
     def forward(self, data):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
-        res3 = self.embedding_net(data[2])
         if self.model != "vit":
             res1 = self.pool(res1).view(-1, self.num_features)
             res2 = self.pool(res2).view(-1, self.num_features)
-            res3 = self.pool(res3).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
-        res3 = F.normalize(res3)
-        return res1, res2, res3
+        return res1, res2
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
