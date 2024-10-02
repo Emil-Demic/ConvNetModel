@@ -58,14 +58,17 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss_fn(output[0], output[1])
+        loss = loss_fn(output[0], output[1]) / 5
 
         running_loss += loss.item()
         loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
 
-        if i % 5 == 4:
+        # optimizer.step()
+        # optimizer.zero_grad()
+
+        if i % 5 == 4 or i == len(dataloader_train) - 1:
+            optimizer.step()
+            optimizer.zero_grad()
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5:0.5f}')
             running_loss = 0.0
 
