@@ -1,8 +1,7 @@
 model			top1    top5	top10	meanK
 normal          82      131     140     3.1448276
 base weights
-linear warm up  
-lr decay
+
 
 
 163 249 265 4.2275863

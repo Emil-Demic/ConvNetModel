@@ -5,7 +5,7 @@ import numpy as np
 from info_nce import InfoNCE
 
 from torch.optim import Adam
-from torch.optim.lr_scheduler import LinearLR
+from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
@@ -43,8 +43,7 @@ if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-iters = 70 * args.users * 4 // args.batch_size
-scheduler = LinearLR(optimizer, start_factor=1./10., total_iters=iters)
+scheduler = CosineAnnealingLR(optimizer, 20)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 
@@ -67,12 +66,11 @@ for epoch in range(args.epochs):
         optimizer.step()
         optimizer.zero_grad()
 
-        scheduler.step()
-
         if i % 3 == 2 or i == len(dataloader_train) - 1:
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 3:0.5f}')
             running_loss = 0.0
 
+    scheduler.step()
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
 
     with torch.no_grad():
