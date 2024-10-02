@@ -12,7 +12,7 @@ parser.add_argument('--save', action='store_true', default=False,
 parser.add_argument('--val_unseen', action='store_true', default=False,
                     help='Use unseen user train/val split')
 
-parser.add_argument('--epochs', type=int, default=4,
+parser.add_argument('--epochs', type=int, default=20,
                     help='Number of epochs to train.')
 
 parser.add_argument('--lr', type=float, default=0.0001,
