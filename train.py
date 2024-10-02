@@ -4,8 +4,8 @@ import torch
 import numpy as np
 from info_nce import InfoNCE
 
-from torch.nn import TripletMarginLoss
 from torch.optim import Adam
+from torch.optim.lr_scheduler import LinearLR
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
@@ -43,9 +43,14 @@ if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+iters = 70 * args.users * 3 / args.batch_size
+scheduler = LinearLR(optimizer, start_factor=1./10., total_iters=iters)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 
+
+best_res = 0
+no_improve = 0
 for epoch in range(args.epochs):
     model.train()
     running_loss = 0.0
@@ -95,6 +100,13 @@ for epoch in range(args.epochs):
         print(str(epoch + 1) + ':  top1: ' + str(top1 / float(num)))
         print(str(epoch + 1) + ':  top5: ' + str(top5 / float(num)))
         print(str(epoch + 1) + ': top10: ' + str(top10 / float(num)))
+
+        if top10 > best_res:
+            best_res = top10
+        else:
+            no_improve += 1
+            if no_improve == 3:
+                break
 
 if args.save:
     torch.save(model.state_dict(), "model.pth")
