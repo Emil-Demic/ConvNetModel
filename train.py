@@ -48,8 +48,8 @@ if args.cuda:
     swa_model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-swa_scheduler = SWALR(optimizer, anneal_epochs=2, swa_lr=args.lr)
-swa_start = args.epochs // 2
+swa_scheduler = SWALR(optimizer, anneal_epochs=2, anneal_strategy="linear", swa_lr=args.lr)
+swa_start = args.epochs - 3
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 # loss_fn = TripletMarginLoss(margin=0.2)
