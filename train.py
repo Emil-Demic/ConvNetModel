@@ -43,7 +43,7 @@ if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-iters = 70 * args.users * 3 / args.batch_size
+iters = 70 * args.users * 4 // args.batch_size
 scheduler = LinearLR(optimizer, start_factor=1./10., total_iters=iters)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
