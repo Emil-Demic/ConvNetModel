@@ -12,7 +12,7 @@ parser.add_argument('--save', action='store_true', default=False,
 parser.add_argument('--val_unseen', action='store_true', default=False,
                     help='Use unseen user train/val split')
 
-parser.add_argument('--epochs', type=int, default=20,
+parser.add_argument('--epochs', type=int, default=4,
                     help='Number of epochs to train.')
 
 parser.add_argument('--lr', type=float, default=0.0001,
@@ -30,7 +30,7 @@ parser.add_argument('--lr_scheduler_step', type=int, default=5,
 parser.add_argument("--model", type=str, default='convnext',
                     help="Name of the model to use for feature extraction.")
 
-parser.add_argument('--users', type=int, default=10,
+parser.add_argument('--users', type=int, default=1,
                     help='Number of users from dataset to use')
 
 parser.add_argument('--seed', type=int, default=42,
