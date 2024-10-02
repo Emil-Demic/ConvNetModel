@@ -5,7 +5,7 @@ import numpy as np
 from info_nce import InfoNCE
 
 from torch.optim import Adam
-from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR
+from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
@@ -43,7 +43,7 @@ if args.cuda:
     model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-scheduler = CosineAnnealingLR(optimizer, 20)
+scheduler = StepLR(optimizer, step_size=5, gamma=0.5)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 
