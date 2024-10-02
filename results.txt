@@ -1,2 +1,2 @@
-model			top1    top5	top10	meanK	amount_removed
-normal          79 129 137 3.3586206
+model			top1    top5	top10	meanK
+normal          79      129     137     3.3586206
