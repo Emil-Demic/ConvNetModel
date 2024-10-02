@@ -9,14 +9,11 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
-from torch.optim.swa_utils import AveragedModel, SWALR
-
 
 from config import args
 from data import DatasetFSCOCO
 from model import SbirModel
 from utils import calculate_accuracy_alt, compute_view_specific_distance, calculate_accuracy
-
 
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -42,14 +39,10 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
 model = SbirModel(args.model)
-# swa_model = AveragedModel(model)
 if args.cuda:
     model.cuda()
-    # swa_model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-# swa_scheduler = SWALR(optimizer, anneal_epochs=2, anneal_strategy="linear", swa_lr=args.lr)
-# swa_start = args.epochs - 3
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 # loss_fn = TripletMarginLoss(margin=0.2)
@@ -65,29 +58,20 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss_fn(output[0], output[1])
+        loss = loss_fn(output[0], output[1]) / 3
 
         running_loss += loss.item()
         loss.backward()
 
-        optimizer.step()
-        optimizer.zero_grad()
-
-        if i % 3 == 2:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 3:0.5f}')
+        if i % 3 == 2 or i == len(dataloader_train) - 1:
+            optimizer.step()
+            optimizer.zero_grad()
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss:0.5f}')
             running_loss = 0.0
-
-    # if epoch >= swa_start:
-    #     swa_model.update_parameters(model)
-    #     swa_scheduler.step()
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
 
     with torch.no_grad():
-        # if epoch == args.epochs - 1:
-        #     print("final epoch")
-        #     torch.optim.swa_utils.update_bn(dataloader_train, swa_model)
-        #     model = swa_model
         model.eval()
 
         sketch_output = []
