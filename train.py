@@ -44,7 +44,7 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.1)
+loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 # loss_fn = TripletMarginLoss(margin=0.2)
 # if args.cuda:
 #     loss_fn.cuda()
