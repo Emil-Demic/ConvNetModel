@@ -49,7 +49,7 @@ if args.cuda:
     # swa_model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-lr_scheduler = CosineAnnealingLR(optimizer, T_max=args.epochs * 2)
+lr_scheduler = CosineAnnealingLR(optimizer, T_max=args.epochs + 1)
 # swa_scheduler = SWALR(optimizer, anneal_epochs=2, swa_lr=args.lr)
 # swa_start = args.epochs // 2
 
