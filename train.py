@@ -45,9 +45,6 @@ if args.cuda:
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
-# loss_fn = TripletMarginLoss(margin=0.2)
-# if args.cuda:
-#     loss_fn.cuda()
 
 for epoch in range(args.epochs):
     model.train()
@@ -58,15 +55,15 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss_fn(output[0], output[1]) / 3
+        loss = loss_fn(output[0], output[1])
 
         running_loss += loss.item()
         loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
 
         if i % 3 == 2 or i == len(dataloader_train) - 1:
-            optimizer.step()
-            optimizer.zero_grad()
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss:0.5f}')
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 3:0.5f}')
             running_loss = 0.0
 
     print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
