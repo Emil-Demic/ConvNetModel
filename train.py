@@ -45,6 +45,7 @@ model = SbirModel(args.model)
 swa_model = AveragedModel(model)
 if args.cuda:
     model.cuda()
+    swa_model.cuda()
 
 optimizer = Adam(model.parameters(), lr=args.lr * 5, weight_decay=args.weight_decay)
 swa_scheduler = SWALR(optimizer, swa_lr=args.lr)
@@ -73,13 +74,14 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
 
         if i % 3 == 2:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss:0.5f}')
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 3:0.5f}')
             running_loss = 0.0
+
     if epoch >= swa_start:
         swa_model.update_parameters(model)
         swa_scheduler.step()
 
-    # print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
+    print(f"lr: {optimizer.state_dict()['param_groups'][0]['lr']}")
 
     with torch.no_grad():
         if epoch == args.epochs - 1:
