@@ -8,7 +8,7 @@ from torch.nn import TripletMarginLoss
 from torch.optim import Adam, lr_scheduler
 from torch.utils.data import DataLoader
 from torchvision.transforms import InterpolationMode
-from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB
+from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB, Grayscale
 
 from config import args
 from data import DatasetFSCOCO
@@ -28,7 +28,8 @@ transforms = Compose([
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
-    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    Grayscale()
 ])
 
 dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
