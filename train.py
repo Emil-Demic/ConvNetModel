@@ -12,7 +12,7 @@ from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDty
 from config import args
 from data import DatasetFSCOCO
 from model import SbirModel
-from utils import calculate_accuracy_alt, compute_view_specific_distance, calculate_accuracy
+from utils import compute_view_specific_distance, calculate_accuracy
 
 random.seed(args.seed)
 np.random.seed(args.seed)
