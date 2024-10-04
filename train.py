@@ -28,7 +28,7 @@ transforms = Compose([
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    # Grayscale(num_output_channels=3),
+    Grayscale(num_output_channels=3),
 ])
 
 dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
