@@ -95,4 +95,5 @@ for epoch in range(args.epochs):
         else:
             no_improve += 1
             if no_improve == 2:
+                print("top10 metric has not improved for 2 epochs. Ending training.")
                 break
