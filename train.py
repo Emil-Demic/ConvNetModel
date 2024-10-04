@@ -65,7 +65,7 @@ for epoch in range(args.epochs):
         optimizer.zero_grad()
 
         if i % 5 == 2:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / max(5):0.5f}')
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
             running_loss = 0.0
 
     with torch.no_grad():
