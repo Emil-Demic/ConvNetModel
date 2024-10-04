@@ -27,7 +27,8 @@ transforms = Compose([
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
-    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
 ])
 
 dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
@@ -89,6 +90,7 @@ for epoch in range(args.epochs):
         top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
 
         if top10 > best_res:
+            no_improve = 0
             best_res = top10
             if args.save:
                 torch.save(model.state_dict(), "model.pth")
