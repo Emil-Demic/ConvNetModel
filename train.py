@@ -23,12 +23,11 @@ if args.cuda:
     torch.use_deterministic_algorithms(True, warn_only=False)
 
 transforms = Compose([
-    RGB(),
+    Grayscale(num_output_channels=3),
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
-    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    Grayscale(num_output_channels=3),
+    # Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
 dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
@@ -89,12 +88,12 @@ for epoch in range(args.epochs):
         print(f"EPOCH {str(epoch)}:")
         top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
 
-        # if top10 > best_res:
-        #     best_res = top10
-        #     if args.save:
-        #         torch.save(model.state_dict(), "model.pth")
-        # else:
-        #     no_improve += 1
-        #     if no_improve == 2:
-        #         print("top10 metric has not improved for 2 epochs. Ending training.")
-        #         break
+        if top10 > best_res:
+            best_res = top10
+            if args.save:
+                torch.save(model.state_dict(), "model.pth")
+        else:
+            no_improve += 1
+            if no_improve == 2:
+                print("top10 metric has not improved for 2 epochs. Ending training.")
+                break
