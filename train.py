@@ -64,7 +64,7 @@ for epoch in range(args.epochs):
         optimizer.step()
         optimizer.zero_grad()
 
-        if i % 5 == 2:
+        if i % 5 == 4:
             print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
             running_loss = 0.0
 
@@ -89,12 +89,12 @@ for epoch in range(args.epochs):
         print(f"EPOCH {str(epoch)}:")
         top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
 
-        if top10 > best_res:
-            best_res = top10
-            if args.save:
-                torch.save(model.state_dict(), "model.pth")
-        else:
-            no_improve += 1
-            if no_improve == 2:
-                print("top10 metric has not improved for 2 epochs. Ending training.")
-                break
+        # if top10 > best_res:
+        #     best_res = top10
+        #     if args.save:
+        #         torch.save(model.state_dict(), "model.pth")
+        # else:
+        #     no_improve += 1
+        #     if no_improve == 2:
+        #         print("top10 metric has not improved for 2 epochs. Ending training.")
+        #         break
