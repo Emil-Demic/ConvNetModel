@@ -86,6 +86,7 @@ for epoch in range(args.epochs):
 
         dis = compute_view_specific_distance(sketch_output, image_output)
 
+        print(f"EPOCH {str(i)}:")
         top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
 
         if top10 > best_res:
