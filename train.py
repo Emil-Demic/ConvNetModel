@@ -64,8 +64,8 @@ for epoch in range(args.epochs):
         optimizer.step()
         optimizer.zero_grad()
 
-        if i % 3 == 2 or i == len(dataloader_train) - 1:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 3:0.5f}')
+        if i % 5 == 2:
+            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / max(5):0.5f}')
             running_loss = 0.0
 
     with torch.no_grad():
@@ -87,14 +87,6 @@ for epoch in range(args.epochs):
         dis = compute_view_specific_distance(sketch_output, image_output)
 
         top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
-        print("top1, top5, top10:", top1, top5, top10)
-
-        top1, top5, top10, meanK = calculate_accuracy_alt(sketch_output, image_output)
-        num = sketch_output.shape[0]
-        print("top1, top5, top10, meanK:", top1, top5, top10, meanK)
-        print(str(epoch + 1) + ':  top1: ' + str(top1 / float(num)))
-        print(str(epoch + 1) + ':  top5: ' + str(top5 / float(num)))
-        print(str(epoch + 1) + ': top10: ' + str(top10 / float(num)))
 
         if top10 > best_res:
             best_res = top10

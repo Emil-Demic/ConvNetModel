@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import Identity, AdaptiveAvgPool2d, AdaptiveMaxPool2d
+from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d
 import torch.nn.functional as F
 
 
@@ -14,16 +14,6 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT).features
             else:
                 net = convnext_small().features
-            num_features = 768
-
-        case 'vit':
-            from torchvision.models import vit_b_16
-            if pretrained:
-                from torchvision.models import ViT_B_16_Weights
-                net = vit_b_16(weights=ViT_B_16_Weights.DEFAULT)
-            else:
-                net = vit_b_16()
-            net.heads = Identity()
             num_features = 768
 
         case 'vgg16':
@@ -42,7 +32,6 @@ class SbirModel(nn.Module):
     def __init__(self, model, pretrained=True):
         super(SbirModel, self).__init__()
         net_info = get_network(model, pretrained)
-        self.model = model
         self.embedding_net = net_info[0]
         self.num_features = net_info[1]
         if model == 'vgg16':
@@ -53,16 +42,14 @@ class SbirModel(nn.Module):
     def forward(self, data):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
-        if self.model != "vit":
-            res1 = self.pool(res1).view(-1, self.num_features)
-            res2 = self.pool(res2).view(-1, self.num_features)
+        res1 = self.pool(res1).view(-1, self.num_features)
+        res2 = self.pool(res2).view(-1, self.num_features)
         res1 = F.normalize(res1)
         res2 = F.normalize(res2)
         return res1, res2
 
     def get_embedding(self, data):
         res = self.embedding_net(data)
-        if self.model != "vit":
-            res = self.pool(res).view(-1, self.num_features)
+        res = self.pool(res).view(-1, self.num_features)
         res = F.normalize(res)
         return res
