@@ -93,7 +93,7 @@ for epoch in range(args.epochs):
             no_improve = 0
             best_res = top10
             if args.save:
-                torch.save(model.state_dict(), "model.pth")
+                torch.save(model.state_dict(), f"E{epoch}_model.pth")
         else:
             no_improve += 1
             if no_improve == 2:
