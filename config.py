@@ -24,9 +24,6 @@ parser.add_argument('--weight_decay', type=float, default=0.,
 parser.add_argument('--batch_size', type=int, default=5,
                     help='Number of samples in each batch.')
 
-parser.add_argument('--lr_scheduler_step', type=int, default=5,
-                    help='Number of steps for learning rate scheduler.')
-
 parser.add_argument("--model", type=str, default='convnext',
                     help="Name of the model to use for feature extraction.")
 
