@@ -24,7 +24,7 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr)
 
-loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temperature)
+loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temp)
 
 best_res = 0
 best_top1 = 0
