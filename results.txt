@@ -11,3 +11,7 @@ triplet margin loss (margin = 0.2)
 
 -resizing   0.490 (1471)    0.715 (2146)    0.808 (2426)
 pad images into a square before resizing
+
+ChairV2
+
+ShoeV2

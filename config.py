@@ -30,6 +30,9 @@ parser.add_argument("--backbone", type=str, default='convnext',
 parser.add_argument("--dataset", type=str, default='fscoco',
                     help="Name of the dataset to use.")
 
+parser.add_argument("--root", type=str, default='fscoco',
+                    help="Root folder of used dataset.")
+
 parser.add_argument('--seed', type=int, default=42,
                     help='Seed for reproducibility.')
 

@@ -13,7 +13,7 @@ from data import create_datasets
 
 seed_everything()
 
-dataset_train, dataset_val = create_datasets("ChairV2", "ChairV2")
+dataset_train, dataset_val = create_datasets(args.dataset, args.root)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
@@ -59,15 +59,16 @@ for epoch in range(args.epochs):
                 data = [d.cuda() for d in data]
 
             output = model(data)
-            sketch_output.append(output[0].cpu().numpy())
-            image_output.append(output[1].cpu().numpy())
+            sketch_output.append(output[0].cpu())
+            image_output.append(output[1].cpu())
 
-        sketch_output = np.concatenate(sketch_output)
-        image_output = np.concatenate(image_output)
+        sketch_output = torch.concatenate(sketch_output)
+        image_output = torch.concatenate(image_output)
 
-        image_output = np.unique(image_output, axis=0)
+        if args.dataset.lower() == 'shoev2' or args.dataset.lower() == 'chairv2':
+            image_output = torch.unique_consecutive(image_output, dim=0)
 
-        dis = compute_view_specific_distance(sketch_output, image_output)
+        dis = compute_view_specific_distance(sketch_output.numpy(), image_output.numpy())
 
         print(f"EPOCH {str(epoch)}:")
         top1, top5, top10 = calculate_results(dis, dataset_val.get_file_names(), dataset_val.get_file_paths(),
