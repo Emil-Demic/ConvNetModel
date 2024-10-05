@@ -23,7 +23,7 @@ if args.cuda:
     torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
-    # RGB(),
+    RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
@@ -34,7 +34,7 @@ dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transfo
 dataset_val = DatasetFSCOCO("fscoco", "val", args.users, transforms, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
-dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 10, shuffle=False)
+dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
 model = SbirModel(args.model)
 if args.cuda:

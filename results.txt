@@ -6,8 +6,8 @@ Ablation
 -convnext   0.255 (765)     0.461 (1382)    0.558 (1675)
 vgg16 backbone (batch size = 100)
 
--infoNCE
+-infoNCE    0.335 (1005)    0.553 (1660)    0.649 (1947)
 triplet margin loss (margin = 0.2)
 
--resizing
+-resizing   0.490 (1471)    0.715 (2146)    0.808 (2426)
 pad images into a square before resizing
