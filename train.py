@@ -18,7 +18,7 @@ dataset_train, dataset_val = create_datasets("ChairV2", "ChairV2")
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
-model = SbirModel(args.model)
+model = SbirModel(args.backbone)
 if args.cuda:
     model.cuda()
 
