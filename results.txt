@@ -2,9 +2,12 @@ model		top1            top5	        top10
 normal      0.515 (1545)    0.748 (2215)    0.815 (2446)
 unseen      0.511 (1533)    0.737 (2212)    0.812 (2435)
 
-Abelation
--convnext
+Ablation
+-convnext   0.255 (765)     0.461 (1382)    0.558 (1675)
 vgg16 backbone (batch size = 100)
 
--infoNCE    
+-infoNCE
 triplet margin loss (margin = 0.2)
+
+-resizing
+pad images into a square before resizing

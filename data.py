@@ -1,6 +1,6 @@
 import os
 
-from PIL import Image
+from PIL import Image, ImageOps
 from torch.utils.data import Dataset
 from config import args
 
@@ -38,8 +38,10 @@ class DatasetFSCOCO(Dataset):
         sketch_path = os.path.join(self.root, "raster_sketches", self.files[idx])
         image_path = os.path.join(self.root, "images", self.files[idx])
 
-        sketch = Image.open(sketch_path)
-        image = Image.open(image_path)
+        sketch = Image.open(sketch_path).convert('RGB')
+        sketch = ImageOps.pad(sketch, size=(224, 224))
+        image = Image.open(image_path).convert('RGB')
+        image = ImageOps.pad(image, size=(224, 224))
 
         if self.transforms_sketch:
             sketch = self.transforms_sketch(sketch)

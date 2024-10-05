@@ -3,7 +3,6 @@ import tqdm
 import torch
 import numpy as np
 from info_nce import InfoNCE
-from torch.nn import TripletMarginLoss
 
 from torch.optim import Adam
 from torch.utils.data import DataLoader
@@ -24,7 +23,7 @@ if args.cuda:
     torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
-    RGB(),
+    # RGB(),
     Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
     ToImage(),
     ToDtype(torch.float32, scale=True),
@@ -35,7 +34,7 @@ dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transfo
 dataset_val = DatasetFSCOCO("fscoco", "val", args.users, transforms, transforms)
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
-dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
+dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 10, shuffle=False)
 
 model = SbirModel(args.model)
 if args.cuda:
@@ -43,8 +42,7 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-# loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
-loss_fn = TripletMarginLoss(margin=0.2)
+loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 
 
 best_res = 0
@@ -58,10 +56,7 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        negative = output[1]
-        negative = torch.cat([negative[-1:], negative[:-1]], dim=0)
-
-        loss = loss_fn(output[0], output[1], negative)
+        loss = loss_fn(output[0], output[1])
 
         running_loss += loss.item()
         loss.backward()
