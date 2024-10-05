@@ -22,7 +22,7 @@ model = SbirModel(args.backbone)
 if args.cuda:
     model.cuda()
 
-optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+optimizer = Adam(model.parameters(), lr=args.lr)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temperature)
 
