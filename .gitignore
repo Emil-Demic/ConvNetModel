@@ -13,3 +13,4 @@ streamlit-app/model.pth
 /streamlit-app/__pycache__
 result.html
 /imagenet-a
+streamlit-app/full_model.pth
