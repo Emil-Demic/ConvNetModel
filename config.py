@@ -18,16 +18,19 @@ parser.add_argument('--epochs', type=int, default=20,
 parser.add_argument('--lr', type=float, default=0.0001,
                     help='Initial learning rate.')
 
-parser.add_argument('--weight_decay', type=float, default=0.,
-                    help='Weight decay (L2 loss on parameters).')
+parser.add_argument('--temp', type=float, default=0.05,
+                    help='Temperature parameter for InfoNCE loss.')
 
 parser.add_argument('--batch_size', type=int, default=5,
                     help='Number of samples in each batch.')
 
-parser.add_argument("--model", type=str, default='convnext',
-                    help="Name of the model to use for feature extraction.")
+parser.add_argument("--backbone", type=str, default='convnext',
+                    help="Name of the backbone to use for feature extraction.")
 
-parser.add_argument('--users', type=int, default=10,
+parser.add_argument("--dataset", type=str, default='fscoco',
+                    help="Name of the dataset to use.")
+
+parser.add_argument('--users', type=int, default=1,
                     help='Number of users from dataset to use')
 
 parser.add_argument('--seed', type=int, default=42,

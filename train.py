@@ -1,37 +1,19 @@
-import random
 import tqdm
 import torch
 import numpy as np
-from info_nce import InfoNCE
 
+from info_nce import InfoNCE
 from torch.optim import Adam
 from torch.utils.data import DataLoader
-from torchvision.transforms import InterpolationMode
-from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB
 
 from config import args
-from data import DatasetFSCOCO
 from model import SbirModel
-from utils import compute_view_specific_distance, calculate_accuracy
+from utils import compute_view_specific_distance, calculate_results, seed_everything
+from data import create_datasets
 
-random.seed(args.seed)
-np.random.seed(args.seed)
-torch.manual_seed(args.seed)
-if args.cuda:
-    torch.cuda.manual_seed(args.seed)
-    torch.backends.cudnn.benchmark = False
-    torch.use_deterministic_algorithms(True, warn_only=True)
+seed_everything()
 
-transforms = Compose([
-    RGB(),
-    Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
-    ToImage(),
-    ToDtype(torch.float32, scale=True),
-    Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
-
-dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
-dataset_val = DatasetFSCOCO("fscoco", "val", args.users, transforms, transforms)
+dataset_train, dataset_val = create_datasets("ChairV2", "ChairV2")
 
 dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle=True)
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
@@ -42,8 +24,7 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
-
+loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temperature)
 
 best_res = 0
 best_top1 = 0
@@ -84,10 +65,13 @@ for epoch in range(args.epochs):
         sketch_output = np.concatenate(sketch_output)
         image_output = np.concatenate(image_output)
 
+        image_output = np.unique(image_output, axis=0)
+
         dis = compute_view_specific_distance(sketch_output, image_output)
 
         print(f"EPOCH {str(epoch)}:")
-        top1, top5, top10 = calculate_accuracy(dis, dataset_val.get_file_names())
+        top1, top5, top10 = calculate_results(dis, dataset_val.get_file_names(), dataset_val.get_file_paths(),
+                                               dataset_val.get_file_map())
 
         if top10 > best_res:
             no_improve = 0
