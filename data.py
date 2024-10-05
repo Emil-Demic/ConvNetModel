@@ -9,18 +9,8 @@ from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDty
 from config import args
 
 
-def create_datasets(dataset, root, transforms_sketch=None, transforms_image=None):
-    if transforms_sketch is None:
-        transforms_sketch = Compose([
-            RGB(),
-            Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
-            ToImage(),
-            ToDtype(torch.float32, scale=True),
-            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
-
-    if transforms_image is None:
-        transforms_image = Compose([
+def create_datasets(dataset, root):
+    transforms = Compose([
             RGB(),
             Resize((224, 224), interpolation=InterpolationMode.BILINEAR),
             ToImage(),
@@ -30,24 +20,24 @@ def create_datasets(dataset, root, transforms_sketch=None, transforms_image=None
 
     match dataset.lower():
         case "fscoco":
-            dataset_train = DatasetFSCOCO(root, mode="train", transforms_sketch=transforms_sketch,
-                                          transforms_image=transforms_image)
-            dataset_val = DatasetFSCOCO(root, mode="val", transforms_sketch=transforms_sketch,
-                                        transforms_image=transforms_image)
+            dataset_train = DatasetFSCOCO(root, mode="train", transforms_sketch=transforms,
+                                          transforms_image=transforms)
+            dataset_val = DatasetFSCOCO(root, mode="val", transforms_sketch=transforms,
+                                        transforms_image=transforms)
             return dataset_train, dataset_val
 
         case "chairv2":
-            dataset_train = DatasetQMUL(root, mode="train", transforms_sketch=transforms_sketch,
-                                        transforms_image=transforms_image)
-            dataset_val = DatasetQMUL(root, mode="val", transforms_sketch=transforms_sketch,
-                                      transforms_image=transforms_image)
+            dataset_train = DatasetQMUL(root, mode="train", transforms_sketch=transforms,
+                                        transforms_image=transforms)
+            dataset_val = DatasetQMUL(root, mode="val", transforms_sketch=transforms,
+                                      transforms_image=transforms)
             return dataset_train, dataset_val
 
         case "shoev2":
-            dataset_train = DatasetQMUL(root, mode="train", transforms_sketch=transforms_sketch,
-                                        transforms_image=transforms_image)
-            dataset_val = DatasetQMUL(root, mode="val", transforms_sketch=transforms_sketch,
-                                      transforms_image=transforms_image)
+            dataset_train = DatasetQMUL(root, mode="train", transforms_sketch=transforms,
+                                        transforms_image=transforms)
+            dataset_val = DatasetQMUL(root, mode="val", transforms_sketch=transforms,
+                                      transforms_image=transforms)
             return dataset_train, dataset_val
 
         case _:
