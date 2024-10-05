@@ -1,7 +1,10 @@
-model			top1    top5	top10	meanK
-normal          82      131     140     3.1448276
+model		top1            top5	        top10
+normal      0.515 (1545)    0.748 (2215)    0.815 (2446)
+unseen      0.511 (1533)    0.737 (2212)    0.812 (2435)
 
-                82      129     137
+Abelation
+-convnext
+vgg16 backbone (batch size = 100)
 
-
-163 249 265 4.2275863
+-infoNCE    
+triplet margin loss (margin = 0.2)
