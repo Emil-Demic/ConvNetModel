@@ -74,14 +74,14 @@ for epoch in range(args.epochs):
         top1, top5, top10 = calculate_results(dis, dataset_val.get_file_names(), dataset_val.get_file_paths(),
                                                dataset_val.get_file_map())
 
-        if top10 > best_res:
+        if top5 > best_res:
             no_improve = 0
-            best_res = top10
+            best_res = top5
             best_top1 = top1
             if args.save:
                 torch.save(model.state_dict(), f"E{epoch}_model.pth")
         else:
-            if args.save and top1 > best_top1 and top10 == best_res:
+            if args.save and top1 > best_top1 and top5 == best_res:
                 best_top1 = top1
                 torch.save(model.state_dict(), f"E{epoch}_model.pth")
             no_improve += 1
