@@ -47,6 +47,7 @@ loss_fn = InfoNCE(negative_mode="unpaired", temperature=0.05)
 
 
 best_res = 0
+best_top1 = 0
 no_improve = 0
 for epoch in range(args.epochs):
     model.train()
@@ -92,9 +93,13 @@ for epoch in range(args.epochs):
         if top10 > best_res:
             no_improve = 0
             best_res = top10
+            best_top1 = top1
             if args.save:
                 torch.save(model.state_dict(), f"E{epoch}_model.pth")
         else:
+            if args.save and top1 > best_top1 and top10 == best_res:
+                best_top1 = top1
+                torch.save(model.state_dict(), f"E{epoch}_model.pth")
             no_improve += 1
             if no_improve == 2:
                 print("top10 metric has not improved for 2 epochs. Ending training.")
