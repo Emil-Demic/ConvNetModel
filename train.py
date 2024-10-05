@@ -20,7 +20,7 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
     torch.backends.cudnn.benchmark = False
-    torch.use_deterministic_algorithms(True, warn_only=False)
+    torch.use_deterministic_algorithms(True, warn_only=True)
 
 transforms = Compose([
     RGB(),
@@ -28,7 +28,6 @@ transforms = Compose([
     ToImage(),
     ToDtype(torch.float32, scale=True),
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    # Grayscale(num_output_channels=3),
 ])
 
 dataset_train = DatasetFSCOCO("fscoco", "train", args.users, transforms, transforms)
