@@ -58,10 +58,10 @@ class DatasetFSCOCO(Dataset):
         for i in range(1, 101):
             file_names = os.listdir(os.path.join(root, "images", str(i)))
             file_names = [file.split('.')[0] for file in file_names]
-            if mode == "train":
-                file_names = [file for file in file_names if int(file) not in val_ids]
-            else:
-                file_names = [file for file in file_names if int(file) in val_ids]
+            # if mode == "train":
+            #     file_names = [file for file in file_names if int(file) not in val_ids]
+            # else:
+            #     file_names = [file for file in file_names if int(file) in val_ids]
             for file_name in file_names:
                 self.files.append(os.path.join(str(i), file_name + ".jpg"))
 
