@@ -7,7 +7,6 @@ def compute_view_specific_distance(sketch_feats, image_feats):
 
 
 def outputHtml(sketchindex, indexList, file_names):
-    imageNameList = file_names
     sketchPath = os.path.join("fscoco", "raster_sketches")
     imgPath = os.path.join("fscoco", "images")
 
@@ -18,10 +17,10 @@ def outputHtml(sketchindex, indexList, file_names):
     for i in indexList:
         if i != sketchindex:
             tmpLine += "<td><image src='%s' width=256 /></td>" % (
-                os.path.join(imgPath, str(imageNameList[i])))
+                os.path.join(imgPath, str(file_names[i])))
         else:
             tmpLine += "<td ><image src='%s' width=256   style='border:solid 2px red' /></td>" % (
-                os.path.join(imgPath, str(imageNameList[i])))
+                os.path.join(imgPath, str(file_names[i])))
 
     return tmpLine + "</tr>"
 
