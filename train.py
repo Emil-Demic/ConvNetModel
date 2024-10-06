@@ -18,7 +18,7 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
 model = SbirModel(args.backbone)
-model.load_state_dict(torch.load("model_shoev2.pth", weights_only=True))
+model.load_state_dict(torch.load("full_model.pth", weights_only=True))
 if args.cuda:
     model.cuda()
 
