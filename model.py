@@ -39,13 +39,17 @@ class SbirModel(nn.Module):
         else:
             self.pool = AdaptiveAvgPool2d(1)
 
+        self.bn = nn.BatchNorm1d(self.num_features, affine=False)
+
     def forward(self, data):
         res1 = self.embedding_net(data[0])
         res2 = self.embedding_net(data[1])
         res1 = self.pool(res1).view(-1, self.num_features)
         res2 = self.pool(res2).view(-1, self.num_features)
-        res1 = F.normalize(res1)
-        res2 = F.normalize(res2)
+        # res1 = F.normalize(res1)
+        # res2 = F.normalize(res2)
+        res1 = self.bn(res1)
+        res2 = self.bn(res2)
         return res1, res2
 
     def get_embedding(self, data):

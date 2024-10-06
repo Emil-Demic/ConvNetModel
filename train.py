@@ -10,6 +10,12 @@ from model import SbirModel
 from utils import compute_view_specific_distance, calculate_results, seed_everything
 from data import create_datasets
 
+def off_diagonal(x):
+    # return a flattened view of the off-diagonal elements of a square matrix
+    n, m = x.shape
+    assert n == m
+    return x.flatten()[:-1].view(n - 1, n + 1)[:, 1:].flatten()
+
 seed_everything()
 
 dataset_train, dataset_val = create_datasets(args.dataset, args.root)
@@ -26,6 +32,8 @@ optimizer = Adam(model.parameters(), lr=args.lr)
 
 loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temp)
 
+lambda_val = 0.0051
+
 best_res = 0
 best_top1 = 0
 no_improve = 0
@@ -38,7 +46,13 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        loss = loss_fn(output[0], output[1])
+        c = output[0].T @ output[1]
+
+        on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
+        off_diag = off_diagonal(c).pow_(2).sum()
+        loss = on_diag + lambda_val * off_diag
+
+        # loss = loss_fn(output[0], output[1])
 
         running_loss += loss.item()
         loss.backward()
@@ -64,6 +78,9 @@ for epoch in range(args.epochs):
 
         sketch_output = torch.concatenate(sketch_output)
         image_output = torch.concatenate(image_output)
+
+        sketch_output = torch.nn.functional.normalize(sketch_output)
+        image_output = torch.nn.functional.normalize(image_output)
 
         if args.dataset.lower() == 'shoev2' or args.dataset.lower() == 'chairv2':
             image_output = torch.unique_consecutive(image_output, dim=0)
