@@ -1,6 +1,5 @@
 import tqdm
 import torch
-import numpy as np
 
 from info_nce import InfoNCE
 from torch.optim import Adam
@@ -19,8 +18,10 @@ dataloader_train = DataLoader(dataset_train, batch_size=args.batch_size, shuffle
 dataloader_val = DataLoader(dataset_val, batch_size=args.batch_size * 3, shuffle=False)
 
 model = SbirModel(args.backbone)
+model.load_state_dict(torch.load("model_shoev2.pth", weights_only=True))
 if args.cuda:
     model.cuda()
+
 
 optimizer = Adam(model.parameters(), lr=args.lr)
 
@@ -30,24 +31,24 @@ best_res = 0
 best_top1 = 0
 no_improve = 0
 for epoch in range(args.epochs):
-    model.train()
-    running_loss = 0.0
-    for i, data in enumerate(dataloader_train):
-        if args.cuda:
-            data = [d.cuda() for d in data]
-
-        output = model(data)
-
-        loss = loss_fn(output[0], output[1])
-
-        running_loss += loss.item()
-        loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
-
-        if i % 5 == 4:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
-            running_loss = 0.0
+    # model.train()
+    # running_loss = 0.0
+    # for i, data in enumerate(dataloader_train):
+    #     if args.cuda:
+    #         data = [d.cuda() for d in data]
+    #
+    #     output = model(data)
+    #
+    #     loss = loss_fn(output[0], output[1])
+    #
+    #     running_loss += loss.item()
+    #     loss.backward()
+    #     optimizer.step()
+    #     optimizer.zero_grad()
+    #
+    #     if i % 5 == 4:
+    #         print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
+    #         running_loss = 0.0
 
     with torch.no_grad():
         model.eval()
@@ -72,7 +73,7 @@ for epoch in range(args.epochs):
 
         print(f"EPOCH {str(epoch)}:")
         top1, top5, top10 = calculate_results(dis, dataset_val.get_file_names(), dataset_val.get_file_paths(),
-                                               dataset_val.get_file_map())
+                                              dataset_val.get_file_map())
 
         if top5 > best_res:
             no_improve = 0
@@ -88,5 +89,3 @@ for epoch in range(args.epochs):
             if no_improve == 2:
                 print("top10 metric has not improved for 2 epochs. Ending training.")
                 break
-
-torch.save(model.state_dict(), f"full_model.pth")

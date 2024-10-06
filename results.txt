@@ -15,3 +15,7 @@ pad images into a square before resizing
 ChairV2     0.781 (243)     0.968 (301)     0.990 (308)
 
 ShoeV2      0.461 (307)     0.782 (521)     0.874 (582)
+
+
+Chairv2 trained on shoe
+Chairv2 trained on fscoco
