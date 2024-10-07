@@ -20,10 +20,11 @@ def get_network(model: str, pretrained: bool):
             import open_clip
 
             if pretrained:
-                model, _, preprocess = open_clip.create_model_and_transforms('convnext_base', pretrained="laion400m_s13b_b51k")
+                model, _, preprocess = open_clip.create_model_and_transforms('convnext_base_w', pretrained="laion2b_s13b_b82k_augreg")
+                net.head = Identity()
                 net = model.visual
 
-            num_features = 512
+            num_features = 1024
 
         case 'vgg16':
             from torchvision.models import vgg16
