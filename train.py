@@ -30,24 +30,24 @@ best_res = 0
 best_top1 = 0
 no_improve = 0
 for epoch in range(args.epochs):
-    model.train()
-    running_loss = 0.0
-    for i, data in enumerate(dataloader_train):
-        if args.cuda:
-            data = [d.cuda() for d in data]
-
-        output = model(data)
-
-        loss = loss_fn(output[0], output[1])
-
-        running_loss += loss.item()
-        loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
-
-        if i % 5 == 4:
-            print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
-            running_loss = 0.0
+    # model.train()
+    # running_loss = 0.0
+    # for i, data in enumerate(dataloader_train):
+    #     if args.cuda:
+    #         data = [d.cuda() for d in data]
+    #
+    #     output = model(data)
+    #
+    #     loss = loss_fn(output[0], output[1])
+    #
+    #     running_loss += loss.item()
+    #     loss.backward()
+    #     optimizer.step()
+    #     optimizer.zero_grad()
+    #
+    #     if i % 5 == 4:
+    #         print(f'[{epoch:03d}, {i:03d}] loss: {running_loss / 5  :0.5f}')
+    #         running_loss = 0.0
 
     with torch.no_grad():
         model.eval()
