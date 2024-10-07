@@ -24,7 +24,7 @@ if args.cuda:
 
 optimizer = Adam(model.parameters(), lr=args.lr)
 
-loss_fn = InfoNCE(negative_mode="paired", temperature=args.temp)
+loss_fn = InfoNCE(negative_mode="unpaired", temperature=args.temp)
 
 best_res = 0
 best_top1 = 0
@@ -38,16 +38,7 @@ for epoch in range(args.epochs):
 
         output = model(data)
 
-        result = []
-        for j in range(len(output[0])):
-            t1_without_row_j = torch.cat([output[0][:j], output[0][j + 1:]])
-            t2_without_row_j = torch.cat([output[1][:j], output[1][j + 1:]])
-            concatenated = torch.cat((t1_without_row_j, t2_without_row_j), dim=0)
-            result.append(concatenated)
-
-        negative = torch.stack(result)
-
-        loss = loss_fn(output[0], output[1], negative)
+        loss = loss_fn(output[0], output[1])
 
         running_loss += loss.item()
         loss.backward()
