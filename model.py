@@ -1,7 +1,6 @@
 from torch import nn
 from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d
 import torch.nn.functional as F
-from convnextv2 import convnextv2_tiny
 
 
 def get_network(model: str, pretrained: bool):
@@ -33,10 +32,8 @@ class SbirModel(nn.Module):
     def __init__(self, model, pretrained=True):
         super(SbirModel, self).__init__()
         net_info = get_network(model, pretrained)
-        # self.embedding_net = net_info[0]
-        # self.num_features = net_info[1]
-        self.embedding_net = convnextv2_tiny()
-        self.num_features = 768
+        self.embedding_net = net_info[0]
+        self.num_features = net_info[1]
         if model == 'vgg16':
             self.pool = AdaptiveMaxPool2d(1)
         else:
