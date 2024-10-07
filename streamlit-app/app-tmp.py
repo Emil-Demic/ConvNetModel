@@ -6,10 +6,10 @@ from PIL import Image
 from streamlit_drawable_canvas import st_canvas
 from torchvision.transforms import InterpolationMode
 from torchvision.transforms.v2 import Resize, Normalize, Compose, ToImage, ToDtype, RGB
-from model import TripletModel
+from model import SbirModel
 
-model = TripletModel("convnext")
-model.load_state_dict(torch.load('model.pth', map_location=torch.device('cpu'), weights_only=True))
+model = SbirModel("convnext")
+model.load_state_dict(torch.load('model_unseen.pth', map_location=torch.device('cpu'), weights_only=True))
 model.eval()
 
 transforms = Compose([
@@ -20,9 +20,8 @@ transforms = Compose([
     Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-gallery_embeddings = np.load('imagenet_a_emb.npy')  # Shape (N, embedding_dim)
-# gallery_embeddings = torch.from_numpy(gallery_embeddings)
-gallery_image_paths = np.load('imagenet_a_paths.npy')  # Shape (N,)
+gallery_embeddings = np.load('unseen_emb.npy')  # Shape (N, embedding_dim)
+gallery_image_paths = np.load('unseen_paths.npy')  # Shape (N,)
 
 def find_similar_embeddings(query_embedding, gallery_embeddings, top_k=10):
     query_embedding = torch.from_numpy(query_embedding).float()
@@ -35,19 +34,22 @@ def find_similar_embeddings(query_embedding, gallery_embeddings, top_k=10):
 
 st.title("TEST APP")
 
-# Create a canvas component
-canvas_result = st_canvas(
-    fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
-    stroke_width=3,
-    stroke_color="#000000",
-    background_color="#EEEEEE",
-    height=512,
-    width=512,
-    drawing_mode="freedraw",
-    key="canvas",
-)   
 
-if st.button("Generate Embedding"):
+with st.form("Sketch"):
+    # Create a canvas component
+    canvas_result = st_canvas(
+        fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
+        stroke_width=3,
+        stroke_color="#000000",
+        background_color="#EEEEEE",
+        height=512,
+        width=512,
+        drawing_mode="freedraw",
+        key="canvas",
+    )
+    generate_embedding = st.form_submit_button("Generate Embedding")
+
+if generate_embedding:
     if canvas_result.image_data is not None:
         st.write("generating embeddings")
         # Convert the drawn image to a PIL image

@@ -14,3 +14,5 @@ streamlit-app/model.pth
 result.html
 /imagenet-a
 streamlit-app/full_model.pth
+streamlit-app/model_unseen.pth
+streamlit-app/model_normal.pth
