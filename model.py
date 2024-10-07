@@ -21,8 +21,9 @@ def get_network(model: str, pretrained: bool):
 
             if pretrained:
                 model, _, preprocess = open_clip.create_model_and_transforms('convnext_base_w', pretrained="laion2b_s13b_b82k_augreg")
-                net.head = Identity()
                 net = model.visual
+                net.head = Identity()
+
 
             num_features = 1024
 
