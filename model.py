@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d, Identity
+from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d
 import torch.nn.functional as F
 
 
@@ -14,8 +14,6 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT).features
             else:
                 net = convnext_small().features
-
-            net[7] = Identity()
             num_features = 768
 
         case 'vgg16':
