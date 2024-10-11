@@ -14,7 +14,7 @@ def get_network(model: str, pretrained: bool):
                 net = convnext_base(weights=ConvNeXt_Base_Weights.DEFAULT).features
             else:
                 net = convnext_base().features
-            net[7] = Identity()
+            net = nn.Sequential(*list(net.children())[:-1])
             num_features = 1024
 
         case 'vgg16':
