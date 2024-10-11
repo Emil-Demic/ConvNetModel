@@ -8,14 +8,14 @@ def get_network(model: str, pretrained: bool):
     num_features = 0
     match model.lower():
         case 'convnext':
-            from torchvision.models import convnext_base
+            from torchvision.models import convnext_small
             if pretrained:
-                from torchvision.models import ConvNeXt_Base_Weights
-                net = convnext_base(weights=ConvNeXt_Base_Weights.DEFAULT).features
+                from torchvision.models import ConvNeXt_Small_Weights
+                net = convnext_small(weights=ConvNeXt_Small_Weights.DEFAULT).features
             else:
-                net = convnext_base().features
+                net = convnext_small().features
             net = nn.Sequential(*list(net.children())[:-1])
-            num_features = 1024
+            num_features = 768
 
         case 'vgg16':
             from torchvision.models import vgg16
