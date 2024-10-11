@@ -53,7 +53,7 @@ def calculate_results(dist, file_names, file_paths, file_map):
             top5 = top5 + 1
         if file_map[i] in rank[:10]:
             top10 = top10 + 1
-        tmp_line += output_html(i, rank[:10], file_names, file_paths, file_map) + "\n"
+        # tmp_line += output_html(i, rank[:10], file_names, file_paths, file_map) + "\n"
     num = dist.shape[0]
     print(f' top1: {str(top1 / float(num))} ({top1})')
     print(f' top5: {str(top5 / float(num))} ({top5})')
