@@ -15,9 +15,8 @@ def get_network(model: str, pretrained: bool):
             else:
                 net = convnext_small().features
 
-            net[6] = Identity()
             net[7] = Identity()
-            num_features = 384
+            num_features = 768
 
         case 'vgg16':
             from torchvision.models import vgg16
