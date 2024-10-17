@@ -1,5 +1,5 @@
 from torch import nn
-from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d, Identity
+from torch.nn import AdaptiveAvgPool2d, AdaptiveMaxPool2d
 import torch.nn.functional as F
 
 
