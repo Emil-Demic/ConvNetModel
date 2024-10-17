@@ -55,7 +55,7 @@ class DatasetFSCOCO(Dataset):
             val_ids = set(map(int, lines))
 
         self.files = []
-        for i in range(1, 11):
+        for i in range(1, 101):
             file_names = os.listdir(os.path.join(root, "images", str(i)))
             file_names = [file.split('.')[0] for file in file_names]
             if mode == "train":
